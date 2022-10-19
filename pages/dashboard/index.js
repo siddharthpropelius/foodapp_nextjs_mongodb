@@ -10,7 +10,6 @@ export async function getServerSideProps() {
 }
 
 export default function Home(props) {
-  // console.log('PROPS::::::::::::', props.res);
   return (
     <div className="mx-[100px]">
       <h1 className="mx-auto text-4xl"> dashboard</h1>

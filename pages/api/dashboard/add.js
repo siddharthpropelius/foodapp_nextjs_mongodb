@@ -12,7 +12,6 @@ export default async function handler(req, res) {
       return res.json({ code: 'Food did not added' });
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ status: 'Something went wrong while adding food' });
   }
 }

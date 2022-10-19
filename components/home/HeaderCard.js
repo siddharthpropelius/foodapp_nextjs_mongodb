@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { Box, Container } from '@mui/system';
-import Image from 'next/image';
+import Image from 'next/future/image';
 import React from 'react';
 import c1 from '../../assets/c1.png';
 import c2 from '../../assets/c2.png';
@@ -32,7 +32,12 @@ const HeaderCard = () => {
             }}
           >
             <Box>
-              <Image src={c1} alt="food" width={500} height={200} />
+              <Image
+                src={c1}
+                alt="food"
+                className="w-[380px] h-[120px]"
+                style={{ maxWidth: 'unset' }}
+              />
             </Box>
             <Typography variant="h5" sx={{ px: 2, pt: 2 }}>
               Dinning Out
@@ -49,7 +54,12 @@ const HeaderCard = () => {
               backgroundColor: '#F5F5F5',
             }}
           >
-            <Image src={c2} alt="food" width={500} height={200} />
+            <Image
+              src={c2}
+              alt="food"
+              className="w-[380px] h-[120px]"
+              style={{ maxWidth: 'unset' }}
+            />
             <Typography variant="h5" sx={{ px: 2, pt: 2 }}>
               Dinning Out
             </Typography>
@@ -65,7 +75,12 @@ const HeaderCard = () => {
               backgroundColor: '#F5F5F5',
             }}
           >
-            <Image src={c3} alt="food" width={500} height={200} />
+            <Image
+              src={c3}
+              alt="food"
+              className="w-[380px] h-[120px]"
+              style={{ maxWidth: 'unset' }}
+            />
             <Typography variant="h5" sx={{ px: 2, pt: 2 }}>
               Dinning Out
             </Typography>

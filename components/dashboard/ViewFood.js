@@ -2,10 +2,9 @@ import Image from 'next/image';
 import React from 'react';
 
 const ViewFood = (props) => {
-  console.log('PROPS:::::::', props);
   return (
     <div className="mt-[100px]">
-      <table class="table-auto">
+      <table className="table-auto">
         <thead>
           <tr>
             <th>Name</th>
@@ -26,9 +25,7 @@ const ViewFood = (props) => {
                   <td>{item.description}</td>
                   <td>{item.Rid}</td>
                   <td>{item.category}</td>
-                  <td>
-                   
-                  </td>
+                  <td></td>
                 </tr>
               </>
             );

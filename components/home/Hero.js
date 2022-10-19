@@ -2,16 +2,15 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { TextField, Typography } from '@mui/material';
 import img from '../../assets/hero.jpg';
-
 import { Box } from '@mui/system';
-import Image from 'next/image';
+import Image from 'next/future/image';
 
 const Hero = () => {
   const StyledDiv = styled('div')({
     position: 'relative',
     margin: 'auto',
     background: 'rgba(0, 0, 0, 0.46)',
-    height: '480px',
+    height: '349px',
   });
 
   return (
@@ -19,12 +18,8 @@ const Hero = () => {
       <Image
         src={img}
         alt="hero-img"
-        width="1500px"
-        height={500}
-        position="absolute"
-        objectFit="cover"
+        className="w-full absolute h-[349px] object-cover"
       />
-
       <StyledDiv>
         <Box
           sx={{
@@ -33,8 +28,7 @@ const Hero = () => {
             alignItems: 'center',
             margin: 'auto',
             color: 'white',
-            paddingTop: { lg: '10%', md: '10%', sm: '10%', xs: '25%' },
-            marginTop:"-485px"
+            paddingTop: { lg: '4%', md: '10%', sm: '10%', xs: '25%' },
           }}
         >
           <Typography

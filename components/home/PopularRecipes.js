@@ -6,9 +6,11 @@ import { Pagination, Autoplay } from 'swiper';
 import 'swiper/css';
 import v1 from '../../assets/v2.png';
 import v2 from '../../assets/v1.png';
-import Image from 'next/image';
+import Image from 'next/future/image';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/slice/slice';
 
 export const categoryList = [
   {
@@ -33,27 +35,35 @@ export const categoryList = [
   },
 ];
 
-const PopularRecipes = () => {
+const PopularRecipes = (props) => {
+  const dispatch = useDispatch();
   const [recipes, setRecipes] = useState([]);
-  const [category, setCategory] = useState('pizza');
+  let category = 'pizza';
   useEffect(() => {
-    axios
-      .post('/api/dashboard/getbycategory', { category: category })
-      .then((res) => {
-        setRecipes(res.data);
-        console.log(res.data);
-      });
+    async function fetchData() {
+      await axios
+        .post('/api/dashboard/getbycategory', { category: category })
+        .then((res) => {
+          setRecipes(res.data);
+        });
+    }
+    fetchData();
   }, []);
 
-  const handleOnClick = (name) => {
-    setCategory(name);
-    axios
+  const handleOnClick = async (name) => {
+    let category = name;
+    await axios
       .post('/api/dashboard/getbycategory', { category: category })
       .then((res) => {
         setRecipes(res.data);
-        console.log(res.data);
       });
   };
+
+  const handleOnAdd = (name) => {
+    dispatch(addToCart(name));
+    props.handler(name);
+  };
+
   return (
     <Box sx={{ position: 'relative' }}>
       <Box sx={{ display: { md: 'block', xs: 'none' } }}>
@@ -155,6 +165,7 @@ const PopularRecipes = () => {
                       cursor: 'pointer',
                     }}
                     key={item.id}
+                    onClick={() => handleOnAdd(item)}
                   >
                     <img
                       src={item.img}
