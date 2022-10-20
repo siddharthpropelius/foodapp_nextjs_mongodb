@@ -38,7 +38,9 @@ const PopularRecipes = (props) => {
   const [recipes, setRecipes] = useState([]);
   const [response, setResponse] = useState('');
   const { data: session } = useSession();
-  let category = 'pizza';
+  // let category = 'pizza';
+  const [category, setCategory] = useState('pizza');
+  console.log(category);
   useEffect(() => {
     async function fetchData() {
       await axios
@@ -51,9 +53,12 @@ const PopularRecipes = (props) => {
   }, []);
 
   const handleOnClick = async (name) => {
-    let category = name;
+    let val = name;
+    setCategory(val);
+    console.log(category);
+    console.log(name, category);
     await axios
-      .post('/api/dashboard/getbycategory', { category: category })
+      .post('/api/dashboard/getbycategory', { category: name })
       .then((res) => {
         setRecipes(res.data);
       });
@@ -118,12 +123,14 @@ const PopularRecipes = (props) => {
           return (
             <>
               <Button
-                key={item.id}
+                key={item._id}
                 sx={{
                   maxWidth: 'unset',
                   width: '200px',
-                  backgroundColor: item.name === category ? '#F6B716' : '#FFF',
-                  color: item.name === category ? 'red' : '#000',
+
+                  color: item.name === category ? 'white' : 'black',
+                  backgroundColor:
+                    item.name === category ? '#F6B716 !important' : '',
                   borderRadius: '45px',
                   px: '40px',
                   '&:hover': {
@@ -177,7 +184,7 @@ const PopularRecipes = (props) => {
                       borderRadius: '25px',
                       cursor: 'pointer',
                     }}
-                    key={item.id}
+                    key={item._id}
                     onClick={() => handleOnAdd(item)}
                   >
                     <Image
