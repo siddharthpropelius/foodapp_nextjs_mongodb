@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import Navbar from '../../components/layout/Navbar';
 import { format, compareAsc } from 'date-fns';
+import Head from 'next/head';
 
 export async function getServerSideProps(context) {
   let id = context.query.id;
@@ -11,20 +12,31 @@ export async function getServerSideProps(context) {
     { method: 'POST', body: id }
   );
 
-  const response = await fetchOrderDetails.json();
+  const res = await fetchOrderDetails.json();
+
+  //fetch metadata
+  const finalURL = 'orderdetail';
+  const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
+    method: 'POST',
+    body: finalURL,
+  });
+  const response = await fetchMetaData.json();
 
   return {
-    props: { response },
+    props: { response: res, res: response.res[0] },
   };
 }
 
 const detail = (props) => {
   let details = props.response[0];
-  let date = details.date;
-  const formatDate = format(Date.parse(date), 'ccc dd LLL yyyy');
 
   return (
     <div>
+      <Head>
+        <meta name="description" content={props?.res?.des} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{props?.res?.title}</title>
+      </Head>
       <Navbar />
       <Container>
         <div className="flex justify-center">
@@ -49,13 +61,10 @@ const detail = (props) => {
           <p>Price</p>
           <p>₹{details.price}</p>
         </div>
+
         <div className="flex justify-between max-w-[300px] mx-auto mt-6">
           <p>Total</p>
-          <p>₹{details.total}</p>
-        </div>
-        <div className="flex justify-between max-w-[300px] mx-auto mt-6">
-          <p>Ordered On</p>
-          <p>{formatDate}</p>
+          <p>₹{details.quantity * details.price}</p>
         </div>
       </Container>
     </div>

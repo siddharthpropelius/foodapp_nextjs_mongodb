@@ -5,31 +5,29 @@ import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import { sliceAction } from '../../redux/slice/slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const FoodWeatherCard = ({ id, name, img, price }) => {
   const { data: session } = useSession();
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState({});
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.slice.food);
+  const user = session.user.email;
 
-  const handleOnClick = (props) => {
-    dispatch(sliceAction.addToCart({ props }));
-    axios
-      .post('/api/cart/add', {
-        item: props.id,
-        name: props.name,
-        img: props.img,
-        price: props.price,
-        user: session.user.email,
-        quantity: 1,
-      })
-      .then((res) => {
-        console.log(res);
-        setResponse(res.data);
-        setTimeout(() => {
-          setResponse('');
-        }, 2000);
-      });
+  const handleOnClick = () => {
+    const find = cart.find((item) => item.id === id);
+    if (find?.quantity === 5) {
+      setResponse({ error: 'Cannot add more than 5 quantity' });
+      setTimeout(() => {
+        setResponse({});
+      }, 1000);
+    } else {
+      setResponse({ success: 'Item added to cart' });
+      setTimeout(() => {
+        setResponse('');
+      }, 1000);
+    }
+    dispatch(sliceAction.addToCart({ id, name, img, price, user }));
   };
   return (
     <>
@@ -62,7 +60,12 @@ const FoodWeatherCard = ({ id, name, img, price }) => {
           15 Min
         </Typography>
 
-        <Typography>{response}</Typography>
+        <Typography sx={{ mt: 1, ml: 1, color: 'red' }}>
+          {response.error}
+        </Typography>
+        <Typography sx={{ mt: 1, ml: 1, color: 'green' }}>
+          {response.success}
+        </Typography>
       </Box>
     </>
   );

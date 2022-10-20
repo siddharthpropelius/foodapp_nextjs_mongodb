@@ -1,4 +1,5 @@
 import { getSession, useSession } from 'next-auth/react';
+import Head from 'next/head';
 import Navbar from '../../components/layout/Navbar';
 import Index from '../../components/order/index';
 
@@ -11,6 +12,15 @@ export async function getServerSideProps(context) {
     return {};
   }
 
+  //fetch metadata
+  const url = context.req.url;
+  const finalURL = url.substring(1);
+  const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
+    method: 'POST',
+    body: finalURL,
+  });
+  const response = await fetchMetaData.json();
+
   //fetching order items from server
 
   const fetchOrders = await fetch('http://localhost:3000/api/order/get', {
@@ -19,7 +29,7 @@ export async function getServerSideProps(context) {
   });
   const order = await fetchOrders.json();
   return {
-    props: { order: order },
+    props: { order: order, res: response.res[0] },
   };
 }
 
@@ -27,6 +37,11 @@ export default function Account(props) {
   const { data: session } = useSession();
   return (
     <>
+      <Head>
+        <meta name="description" content={props?.res?.des} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{props?.res?.title}</title>
+      </Head>
       <Navbar />
       <Index orders={props.order} />
     </>

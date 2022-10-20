@@ -5,10 +5,11 @@ connect();
 
 export default async function handler(req, res) {
   try {
-    console.log('date', req.body.cart);
+    console.log('date', req.body);
     const user = req.body.cart[0].user;
-    console.log('REQUSET BODT+Y:::::', req.body);
-    await Order.create(req.body.cart);
+
+    const create = await Order.create(req.body.cart);
+    console.log(create);
     await Cart.deleteMany({
       user: user,
     });

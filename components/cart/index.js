@@ -1,25 +1,28 @@
 import { Container, Typography } from '@mui/material';
 import { Box } from '@mui/material';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import CartCard from './CartCard';
+import { useSelector } from 'react-redux';
+import { useSession } from 'next-auth/react';
 
-const Index = ({ cart }) => {
-  const [total, setTotal] = useState(0);
-  console.log(cart.length);
-
-  useEffect(() => {
-    cart.forEach((item) => {
-      const calculateTotal = cart.reduce(
-        (total, currentItem) => (total = total + currentItem.total),
-        0
-      );
-      setTotal(calculateTotal);
-    });
-  }, []);
+const Index = () => {
+  const cart = useSelector((state) => state.slice.food);
+  const total = useSelector((state) => state.slice.total);
+  const [response, setResponse] = useState('');
+  const [qty, setQty] = useState(0);
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const handleOrderBtn = () => {
-    axios.post('/api/order/add', { cart }).then((res) => {});
+    axios.post('/api/order/add', { cart }).then((res) => {
+      setResponse(res.data);
+      setTimeout(() => {
+        setResponse('');
+        router.push('/order');
+      }, 1000);
+    });
   };
   return (
     <div>
@@ -59,7 +62,7 @@ const Index = ({ cart }) => {
                   return (
                     <div key={item._id}>
                       <CartCard
-                        id={item._id}
+                        id={item.id}
                         item={item.item}
                         name={item.name}
                         price={item.price}
@@ -105,7 +108,6 @@ const Index = ({ cart }) => {
               display: 'flex',
               justifyContent: 'center',
               pt: '30px',
-              pb: '50px',
             }}
           >
             <Typography
@@ -125,6 +127,17 @@ const Index = ({ cart }) => {
               Order Now
             </Typography>
           </Box>
+          <Typography
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+
+              pb: '50px',
+              color: 'green',
+            }}
+          >
+            {response}
+          </Typography>
         </>
       )}
     </div>

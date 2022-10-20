@@ -1,32 +1,40 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import Image from 'next/future/image';
 import React from 'react';
-import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { addToCart } from '../../redux/slice/slice';
+import { sliceAction } from '../../redux/slice/slice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const CategoryCard = ({ id, name, des, price, img, category }) => {
+  const cart = useSelector((state) => state.slice.food);
   const { data: session } = useSession();
-  const [response, setResponse] = useState('');
-  const addToCart = (props) => {
-    axios
-      .post('/api/cart/add', {
-        item: props.id,
-        name: props.name,
-        img: props.img,
-        category: props.category,
-        price: props.price,
-        user: session.user.email,
-        quantity: 1,
+  const [response, setResponse] = useState({});
+  const dispatch = useDispatch();
+  const user = session?.user?.email;
+  const addToCart = ({ id, name, img, price }) => {
+    const find = cart.find((item) => item.id === id);
+    if (find?.quantity === 5) {
+      setResponse({ error: 'Cannot add more than 5 quantity' });
+      setTimeout(() => {
+        setResponse({});
+      }, 1000);
+    } else {
+      setResponse({ success: 'Item added to cart' });
+      setTimeout(() => {
+        setResponse('');
+      }, 1000);
+    }
+    dispatch(
+      sliceAction.addToCart({
+        id: id,
+        name: name,
+        img: img,
+        price: price,
+        user: user,
       })
-      .then((res) => {
-        setResponse(res.data);
-        setTimeout(() => {
-          setResponse('');
-        }, 2000);
-      });
+    );
   };
   return (
     <div>
@@ -86,7 +94,12 @@ const CategoryCard = ({ id, name, des, price, img, category }) => {
               </button>
             </>
           </Box>
-          <Typography sx={{ mt: 1, ml: 1 }}>{response}</Typography>
+          <Typography sx={{ mt: 1, ml: 1, color: 'red' }}>
+            {response.error}
+          </Typography>
+          <Typography sx={{ mt: 1, ml: 1, color: 'green' }}>
+            {response.success}
+          </Typography>
         </Box>
       </Box>
     </div>

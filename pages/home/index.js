@@ -23,6 +23,7 @@ export async function getServerSideProps(context) {
   });
   const response = await fetchMetaData.json();
 
+
   return {
     props: { res: response.res[0] },
   };
@@ -39,7 +40,7 @@ export default function Home(props) {
         <meta name="description" content={props?.res?.des} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{props?.res?.title}</title>
-        <title>Home</title>
+        {/* <title>Home</title> */}
       </Head>
       <NavBar />
       <Hero />

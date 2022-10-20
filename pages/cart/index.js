@@ -15,14 +15,12 @@ export async function getServerSideProps(context) {
   // fetch metadata
   const url = context.req.url;
   const finalURL = url.substring(1);
-
   const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
     method: 'POST',
     body: finalURL,
   });
-
   const response = await fetchMetaData.json();
-
+  console.log('RESPONSE::::', response);
   //fetching cart items from server
 
   const fetchcartList = await fetch('http://localhost:3000/api/cart/get', {
@@ -37,15 +35,18 @@ export async function getServerSideProps(context) {
 
 export default function Account(props) {
   const { data: session } = useSession();
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('token', 'hi');
+  }
   return (
     <>
       <Head>
         <meta name="description" content={props?.res?.des} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{props?.res?.title}</title>
-        <title>Cart </title>
+        {/* <title>Cart </title> */}
       </Head>
-      <Navbar />
+      <Navbar cart={props.cart} />
       <Index cart={props.cart} />
     </>
   );
