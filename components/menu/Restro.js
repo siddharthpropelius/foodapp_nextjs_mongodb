@@ -1,4 +1,5 @@
 import { Box, Container, Typography } from '@mui/material';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -26,14 +27,16 @@ const Restro = (props) => {
         >
           {props.data.map((item) => {
             return (
-              <>
-                <img
+              <div key={item._id}>
+                <Image
                   src={item.img}
                   alt={item.name}
+                  width={120}
+                  height={120}
                   style={{ width: '120px', cursor: 'pointer' }}
                   onClick={() => handleClick(item.Rid)}
                 />
-              </>
+              </div>
             );
           })}
         </Box>

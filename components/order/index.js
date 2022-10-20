@@ -34,7 +34,7 @@ const index = ({ orders }) => {
                   <Typography sx={{ px: 1 }}>
                     {item.name.toUpperCase()}
                   </Typography>
-                  <p className="px-1 pb-1 hover:underline cursor-pointer">
+                  <p className="px-2 pb-1 hover:underline cursor-pointer">
                     <Link href={`/order/${item._id}`}> View Details</Link>
                   </p>
                 </Box>
