@@ -60,7 +60,6 @@ const PopularRecipes = (props) => {
   };
 
   const handleOnAdd = (props) => {
-    console.log(props);
     axios
       .post('/api/cart/add', {
         item: props.id,
@@ -71,7 +70,6 @@ const PopularRecipes = (props) => {
         quantity: 1,
       })
       .then((res) => {
-        console.log(res);
         setResponse(res.data);
         setTimeout(() => {
           setResponse('');

@@ -20,7 +20,6 @@ export async function getServerSideProps(context) {
     body: finalURL,
   });
   const response = await fetchMetaData.json();
-  console.log('RESPONSE::::', response);
   //fetching cart items from server
 
   const fetchcartList = await fetch('http://localhost:3000/api/cart/get', {

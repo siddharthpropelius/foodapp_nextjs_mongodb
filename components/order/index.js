@@ -4,7 +4,6 @@ import Link from 'next/link';
 import React from 'react';
 
 const index = ({ orders }) => {
-  console.log(orders);
   return (
     <div>
       <Container>
@@ -15,7 +14,7 @@ const index = ({ orders }) => {
           sx={{
             mt: 2,
             display: 'flex',
-            justifyContent: 'space-around',
+            justifyContent: 'center',
             flexWrap: 'wrap',
             gap: 5,
           }}

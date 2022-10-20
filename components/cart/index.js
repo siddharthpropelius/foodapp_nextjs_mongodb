@@ -121,6 +121,7 @@ const Index = () => {
                 borderRadius: '10px',
                 paddingY: '10px',
                 marginBottom: '10px',
+                cursor: 'pointer',
               }}
               onClick={handleOrderBtn}
             >
