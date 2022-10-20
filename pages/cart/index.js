@@ -22,13 +22,8 @@ export async function getServerSideProps(context) {
   const response = await fetchMetaData.json();
   //fetching cart items from server
 
-  const fetchcartList = await fetch('http://localhost:3000/api/cart/get', {
-    method: 'POST',
-    body: session.user.email,
-  });
-  const cart = await fetchcartList.json();
   return {
-    props: { cart: cart, res: response.res[0] },
+    props: { res: response.res[0] },
   };
 }
 
