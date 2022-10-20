@@ -63,9 +63,9 @@ const FoodWeather = () => {
             return (
               <>
                 <FoodWeatherCard
-                  key={item.id}
+                  key={item._id}
                   name={item.name}
-                  id={item.id}
+                  id={item._id}
                   price={item.price}
                   img={item.img}
                   time={item.time}

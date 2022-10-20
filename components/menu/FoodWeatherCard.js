@@ -1,17 +1,40 @@
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import Image from 'next/image';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
+import { sliceAction } from '../../redux/slice/slice';
+import { useDispatch } from 'react-redux';
 
-const FoodWeatherCard = ({ id, name, time, img, des, price }) => {
-  const [message, setMessage] = useState(false);
-  const [error, setError] = useState(false);
+const FoodWeatherCard = ({ id, name, img, price }) => {
+  const { data: session } = useSession();
+  const [response, setResponse] = useState('');
   const dispatch = useDispatch();
-  const handleOnClick = (itemid) => {};
+
+  const handleOnClick = (props) => {
+    dispatch(sliceAction.addToCart({ props }));
+    axios
+      .post('/api/cart/add', {
+        item: props.id,
+        name: props.name,
+        img: props.img,
+        price: props.price,
+        user: session.user.email,
+        quantity: 1,
+      })
+      .then((res) => {
+        console.log(res);
+        setResponse(res.data);
+        setTimeout(() => {
+          setResponse('');
+        }, 2000);
+      });
+  };
   return (
     <>
       <Box
-        onClick={() => handleOnClick(id)}
+        onClick={() => handleOnClick({ id, name, img, price })}
         sx={{
           width: {
             xs: '200px',
@@ -22,13 +45,13 @@ const FoodWeatherCard = ({ id, name, time, img, des, price }) => {
           cursor: 'pointer',
         }}
       >
-        <img
+        <Image
           src={img}
           alt={name}
+          width={500}
+          height={400}
+          objectFit="cover"
           style={{
-            objectFit: 'cover',
-            width: '100%',
-            height: '200px',
             borderRadius: '20px 20px 0px 0px',
           }}
         />
@@ -38,18 +61,8 @@ const FoodWeatherCard = ({ id, name, time, img, des, price }) => {
         <Typography variant="p" sx={{ color: '#999999', pb: '8px' }}>
           15 Min
         </Typography>
-        {message ? (
-          <Typography sx={{ color: 'green' }}>Item added to cart</Typography>
-        ) : (
-          ''
-        )}
-        {error ? (
-          <Typography sx={{ color: 'red' }}>
-            Cant add mor than 5 items
-          </Typography>
-        ) : (
-          ''
-        )}
+
+        <Typography>{response}</Typography>
       </Box>
     </>
   );

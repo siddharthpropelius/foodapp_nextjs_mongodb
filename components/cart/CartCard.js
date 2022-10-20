@@ -9,7 +9,6 @@ const CartCard = ({ id, item, name, img, quantity, price, des, total }) => {
   const [response, setResponse] = useState('');
   const [qty, setQty] = useState(quantity);
   const [totalPrice, setTotalPrice] = useState(total);
-  console.log('TOTAL', total);
   const addToCart = () => {
     axios
       .post('/api/cart/add', {
@@ -31,7 +30,6 @@ const CartCard = ({ id, item, name, img, quantity, price, des, total }) => {
           setResponse('');
         }, 2000);
       });
-    console.log('NEW', total);
   };
 
   const removeFromCart = () => {
@@ -46,6 +44,7 @@ const CartCard = ({ id, item, name, img, quantity, price, des, total }) => {
           // const filter = cartList.filter((item) => item.item !== item);
           // console.log('filter::::::::', filter);
           window.location.reload();
+          return;
         } else {
           setQty(--qty);
           setTotalPrice(qty * price);

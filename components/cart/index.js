@@ -1,22 +1,26 @@
 import { Container, Typography } from '@mui/material';
 import { Box } from '@mui/material';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import CartCard from './CartCard';
 
 const Index = ({ cart }) => {
-  const [cartList, setCartList] = useState([...cart]);
-  console.log(cartList);
   const [total, setTotal] = useState(0);
+  console.log(cart.length);
+
   useEffect(() => {
-    cartList.forEach((item) => {
-      const calculateTotal = cartList.reduce(
+    cart.forEach((item) => {
+      const calculateTotal = cart.reduce(
         (total, currentItem) => (total = total + currentItem.total),
         0
       );
       setTotal(calculateTotal);
-      console.log(total);
     });
   }, []);
+
+  const handleOrderBtn = () => {
+    axios.post('/api/order/add', { cart }).then((res) => {});
+  };
   return (
     <div>
       <Container>
@@ -24,7 +28,7 @@ const Index = ({ cart }) => {
           Your Cart
         </Typography>
       </Container>
-      {cartList.length === 0 ? (
+      {cart.length === 0 ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: '100px' }}>
           <Typography
             sx={{
@@ -51,7 +55,7 @@ const Index = ({ cart }) => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'column', flex: 2 }}>
-                {cartList?.map((item) => {
+                {cart?.map((item) => {
                   return (
                     <div key={item._id}>
                       <CartCard
@@ -116,6 +120,7 @@ const Index = ({ cart }) => {
                 paddingY: '10px',
                 marginBottom: '10px',
               }}
+              onClick={handleOrderBtn}
             >
               Order Now
             </Typography>

@@ -2,37 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const slice = createSlice({
   name: 'slice',
-  initialState: { cart: [] },
+  initialState: { total: 0, food: [] },
   reducers: {
     addToCart(state, action) {
-      const input = action.payload;
-      const existingItem = state.cart.find((item) => item.id === input.id);
-
-      if (existingItem) {
-        if (existingItem.quantity < 5) {
-          existingItem.quantity++;
-          existingItem.total = existingItem.price * existingItem.quantity;
-        }
-      } else {
-        state.cart.push({
-          id: input.id,
-          name: input.name,
-          price: input.price,
-          img: input.img,
-          quantity: 1,
-          total: input.price,
-        });
-      }
+      console.log('payload', action.payload.total);
+      state.total = action.payload.total;
+      const price = action.payload.price;
+      state.total += price;
     },
     removeFromCart(state, action) {
-      const id = action.payload;
-      const existingItem = state.cart.find((item) => item.id === id);
-      if (existingItem.quantity === 1) {
-        state.cart = state.cart.filter((item) => item.id !== id);
-      } else {
-        existingItem.quantity--;
-      }
-      state.totalItem--;
+      const price = action.payload.props.price;
+      const quantity = action.payload.props.quantity;
+      console.log('REDUX', price, quantity);
+      state.total -= price;
     },
   },
 });

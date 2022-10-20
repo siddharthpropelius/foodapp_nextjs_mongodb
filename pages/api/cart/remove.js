@@ -23,7 +23,6 @@ export default async function handler(req, res) {
       );
       res.send('Item -1 from  Cart');
     }
-    res.send(find);
   } catch (error) {
     res.send(error);
     // res.status(400).json({ status: 'Something went wrong while adding food' });

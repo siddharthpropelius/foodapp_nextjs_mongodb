@@ -9,8 +9,7 @@ import v2 from '../../assets/v1.png';
 import Image from 'next/future/image';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/slice/slice';
+import { useSession } from 'next-auth/react';
 
 export const categoryList = [
   {
@@ -36,8 +35,9 @@ export const categoryList = [
 ];
 
 const PopularRecipes = (props) => {
-  const dispatch = useDispatch();
   const [recipes, setRecipes] = useState([]);
+  const [response, setResponse] = useState('');
+  const { data: session } = useSession();
   let category = 'pizza';
   useEffect(() => {
     async function fetchData() {
@@ -59,9 +59,24 @@ const PopularRecipes = (props) => {
       });
   };
 
-  const handleOnAdd = (name) => {
-    dispatch(addToCart(name));
-    props.handler(name);
+  const handleOnAdd = (props) => {
+    console.log(props);
+    axios
+      .post('/api/cart/add', {
+        item: props.id,
+        name: props.name,
+        img: props.img,
+        price: props.price,
+        user: session.user.email,
+        quantity: 1,
+      })
+      .then((res) => {
+        console.log(res);
+        setResponse(res.data);
+        setTimeout(() => {
+          setResponse('');
+        }, 2000);
+      });
   };
 
   return (
@@ -167,9 +182,11 @@ const PopularRecipes = (props) => {
                     key={item.id}
                     onClick={() => handleOnAdd(item)}
                   >
-                    <img
+                    <Image
                       src={item.img}
                       alt="food"
+                      width={500}
+                      height={400}
                       style={{
                         width: '100%',
                         height: '70%',

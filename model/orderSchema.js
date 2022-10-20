@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const cartSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
   item: {
     type: String,
     required: false,
@@ -13,15 +13,7 @@ const cartSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  category: {
-    type: String,
-    required: false,
-  },
   price: {
-    type: String,
-    required: false,
-  },
-  description: {
     type: String,
     required: false,
   },
@@ -47,4 +39,4 @@ const cartSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.models.Cart || mongoose.model('Cart', cartSchema);
+module.exports = mongoose.models.Order || mongoose.model('Order', orderSchema);
