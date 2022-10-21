@@ -1,7 +1,6 @@
 import { Container, IconButton, Badge } from '@mui/material';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import React from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -54,7 +53,10 @@ const Navbar = () => {
                 </IconButton>
               </Link>
             </li>
-            <li className="p-4 cursor-pointer" onClick={() => signOut()}>
+            <li
+              className="p-4 cursor-pointer"
+              onClick={() => signOut('google', { callbackUrl: 'http://localhost:3000/' })}
+            >
               <IconButton aria-label="cart">
                 <LogoutIcon />
               </IconButton>
