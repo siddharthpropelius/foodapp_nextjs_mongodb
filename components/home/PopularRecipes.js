@@ -10,6 +10,8 @@ import Image from 'next/future/image';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { sliceAction } from '../../redux/slice/slice';
 
 export const categoryList = [
   {
@@ -36,11 +38,12 @@ export const categoryList = [
 
 const PopularRecipes = (props) => {
   const [recipes, setRecipes] = useState([]);
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState({});
   const { data: session } = useSession();
-  // let category = 'pizza';
+  const cart = useSelector((state) => state.slice.food);
+  const dispatch = useDispatch();
   const [category, setCategory] = useState('pizza');
-  console.log(category);
+  console.log('cart', cart);
   useEffect(() => {
     async function fetchData() {
       await axios
@@ -65,21 +68,28 @@ const PopularRecipes = (props) => {
   };
 
   const handleOnAdd = (props) => {
-    axios
-      .post('/api/cart/add', {
-        item: props.id,
+    const find = cart.find((item) => item.id === props.id);
+    console.log(find);
+    if (find?.quantity === 5) {
+      setResponse({ error: 'Cannot add more than 5 quantity' });
+      setTimeout(() => {
+        setResponse({});
+      }, 1000);
+    } else {
+      setResponse({ success: 'Item added to cart' });
+      setTimeout(() => {
+        setResponse('');
+      }, 1000);
+    }
+    dispatch(
+      sliceAction.addToCart({
+        id: props.id,
         name: props.name,
         img: props.img,
         price: props.price,
         user: session.user.email,
-        quantity: 1,
       })
-      .then((res) => {
-        setResponse(res.data);
-        setTimeout(() => {
-          setResponse('');
-        }, 2000);
-      });
+    );
   };
 
   return (

@@ -2,10 +2,17 @@ import { Box, Container } from '@mui/material';
 import Image from 'next/image';
 import React from 'react';
 import Navbar from '../../components/layout/Navbar';
-import { format, compareAsc } from 'date-fns';
 import Head from 'next/head';
+import { getSession } from 'next-auth/react';
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    context.res.writeHead(302, { Location: '/' });
+    context.res.end;
+    return {};
+  }
+
   let id = context.query.id;
   const fetchOrderDetails = await fetch(
     'http://localhost:3000/api/order/details',

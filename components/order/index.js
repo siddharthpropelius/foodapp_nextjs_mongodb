@@ -41,7 +41,10 @@ const index = ({ orders }) => {
               {orders?.map((item) => {
                 return (
                   <>
-                    <Box key={item._id} sx={{ border: '1px solid black' }}>
+                    <Box
+                      key={item._id}
+                      sx={{ border: '1px solid black', borderRadius: '5px' }}
+                    >
                       <Image
                         src={item.img}
                         width={250}

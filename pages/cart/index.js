@@ -2,7 +2,6 @@ import { getSession, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Navbar from '../../components/layout/Navbar';
 import Index from '../../components/cart/index';
-import { useSelector } from 'react-redux';
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -14,13 +13,13 @@ export async function getServerSideProps(context) {
   }
   // fetch metadata
   const url = context.req.url;
-  const finalURL = url.substring(1);
+  // const finalURL = url.substring(1);
+  const finalURL = 'cart';
   const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
     method: 'POST',
     body: finalURL,
   });
   const response = await fetchMetaData.json();
-  //fetching cart items from server
 
   return {
     props: { res: response.res[0] },
@@ -29,16 +28,14 @@ export async function getServerSideProps(context) {
 
 export default function Account(props) {
   const { data: session } = useSession();
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('token', 'hi');
-  }
+
   return (
     <>
       <Head>
-        <meta name="description" content={props?.res?.des} />
+        {/* <meta name="description" content={props?.res?.des} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{props?.res?.title}</title>
-        {/* <title>Cart </title> */}
+        <title>{props?.res?.title}</title> */}
+        <title>Cart </title>
       </Head>
       <Navbar cart={props.cart} />
       <Index cart={props.cart} />

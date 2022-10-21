@@ -4,8 +4,9 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import CartCard from './CartCard';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
+import { sliceAction } from '../../redux/slice/slice';
 
 const Index = () => {
   const cart = useSelector((state) => state.slice.food);
@@ -14,13 +15,18 @@ const Index = () => {
   const [qty, setQty] = useState(0);
   const router = useRouter();
   const { data: session } = useSession();
+  const dispatch = useDispatch();
 
   const handleOrderBtn = () => {
     axios.post('/api/order/add', { cart }).then((res) => {
+      console.log(res.data);
       setResponse(res.data);
       setTimeout(() => {
         setResponse('');
         router.push('/order');
+        setTimeout(() => {
+          dispatch(sliceAction.reset());
+        }, 1000);
       }, 1000);
     });
   };

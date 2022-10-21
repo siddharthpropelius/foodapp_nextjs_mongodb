@@ -15,10 +15,10 @@ const Navbar = () => {
   const StyledBadge = styled(Badge)(({ theme }) => ({}));
   const qty = useSelector((state) => state.slice.qty);
   return (
-    <div className="bg-[white] z-999">
+    <div className="bg-[white] z-999 overflow-hidden">
       <Container>
-        <div className="flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 ">
-          <h1 className=" text-[#FFC300]">
+        <div className="flex justify-center md:justify-between items-center h-24 max-w-[1240px] mx-auto px-4 ">
+          <h1 className=" text-[#FFC300] hidden md:block">
             <Link href="/home"> NoodleTown</Link>
           </h1>
 

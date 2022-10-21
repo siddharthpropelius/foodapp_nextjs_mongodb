@@ -16,13 +16,13 @@ export async function getServerSideProps(context) {
     return {};
   }
   const url = context.req.url;
-  const finalURL = url.substring(1);
+  // const finalURL = url.substring(1);
+  const finalURL = 'home';
   const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
     method: 'POST',
     body: finalURL,
   });
   const response = await fetchMetaData.json();
-
 
   return {
     props: { res: response.res[0] },

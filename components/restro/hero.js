@@ -1,5 +1,5 @@
 import { Box } from '@mui/system';
-import Image from 'next/future/image';
+import Image from 'next/image';
 import React from 'react';
 import r1 from '../../assets/r1.png';
 import r2 from '../../assets/r2.png';

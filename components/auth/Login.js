@@ -6,7 +6,7 @@ import { signIn } from 'next-auth/react';
 const Login = () => {
   return (
     <div className="h-screen py-auto ">
-      <div className="flex flex-col w-3/4 md:w-1/4 m-auto mt-[10%]  border-2">
+      <div className="flex flex-col w-3/4 md:w-1/4 m-auto mt-[10%] ">
         <h2 className="mx-auto md:text-4xl text-2xl text-[#FFC300] mt-2">NOODLETOWN</h2>
         <button
           className="mt-[200px] bg-white text-blue-500 w-[300px] px-2 py-1 mx-auto flex gap-12 mb-2"

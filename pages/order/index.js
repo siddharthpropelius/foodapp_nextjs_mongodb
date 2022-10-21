@@ -14,22 +14,25 @@ export async function getServerSideProps(context) {
 
   //fetch metadata
   const url = context.req.url;
-  const finalURL = url.substring(1);
+  // const finalURL = url.substring(1);
+  const finalURL = 'order';
   const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
     method: 'POST',
     body: finalURL,
   });
   const response = await fetchMetaData.json();
+  console.log('RESPONSE FROM METADATA', await response);
 
   //fetching order items from server
-
+  let tempRes = {};
   const fetchOrders = await fetch('http://localhost:3000/api/order/get', {
     method: 'POST',
     body: session.user.email,
   });
   const order = await fetchOrders.json();
+
   return {
-    props: { order: order, res: response.res[0] },
+    props: { order: order },
   };
 }
 

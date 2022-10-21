@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from '@mui/material';
-import Image from 'next/image';
+import Image from 'next/future/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -33,7 +33,8 @@ const Restro = (props) => {
                   alt={item.name}
                   width={120}
                   height={120}
-                  style={{ width: '120px', cursor: 'pointer' }}
+                  overflowX="scroll"
+                  style={{ cursor: 'pointer' }}
                   onClick={() => handleClick(item.Rid)}
                 />
               </div>

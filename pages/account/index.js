@@ -1,5 +1,5 @@
 import { getSession, useSession, signOut } from 'next-auth/react';
-import Image from 'next/future/image';
+import Image from 'next/image';
 import Head from 'next/head';
 import Navbar from '../../components/layout/Navbar';
 
@@ -13,7 +13,8 @@ export async function getServerSideProps(context) {
 
   //fetch metadata
   const url = context.req.url;
-  const finalURL = url.substring(1);
+  // const finalURL = url.substring(1);
+  const finalURL = 'account';
   const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
     method: 'POST',
     body: finalURL,

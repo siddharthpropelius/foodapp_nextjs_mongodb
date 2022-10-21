@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const slice = createSlice({
   name: 'slice',
-  initialState: { total: 0, food: [], total: 0, qty: 0 },
+  initialState: { total: 0, food: [], qty: 0 },
   reducers: {
     addToCart(state, action) {
       const newItem = action.payload;
@@ -29,6 +29,11 @@ const slice = createSlice({
         state.total += newItem.price;
         state.qty++;
       }
+    },
+    reset(state) {
+      state.food = [];
+      state.total = 0;
+      state.qty = 0;
     },
     removeFromCart(state, action) {
       const id = action.payload;

@@ -16,6 +16,7 @@ const Hero = () => {
   return (
     <div>
       <Image
+      quality={60}
         src={img}
         alt="hero-img"
         className="w-full absolute h-[349px] object-cover"
