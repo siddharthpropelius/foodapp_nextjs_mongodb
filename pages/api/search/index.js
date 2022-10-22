@@ -9,5 +9,4 @@ export default async function handler(req, res) {
     $or: [{ name: req.body }, { category: req.body }],
   });
   res.send({ res: find });
-  console.log('response in backende====>>>>>', find);
 }
