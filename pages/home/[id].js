@@ -15,7 +15,7 @@ export async function getServerSideProps(context) {
   }
 
   //fetch metadata
-  const finalURL = 'orderdetail';
+  const finalURL = 'search';
   const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
     method: 'POST',
     body: finalURL,
