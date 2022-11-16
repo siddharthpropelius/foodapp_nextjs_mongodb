@@ -9,67 +9,76 @@ import v2 from '../../assets/v1.png';
 import Image from 'next/future/image';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { sliceAction } from '../../redux/slice/slice';
-
-export const categoryList = [
-  {
-    id: 0,
-    name: 'pizza',
-  },
-  {
-    id: 1,
-    name: 'burger',
-  },
-  {
-    id: 2,
-    name: 'garlic',
-  },
-  {
-    id: 3,
-    name: 'lasagna',
-  },
-  {
-    id: 4,
-    name: 'dessert',
-  },
-];
+import Cookies from 'js-cookie';
+import axiosInstance from '../../utils/axiosInstance';
+import { useRouter } from 'next/router';
 
 const PopularRecipes = (props) => {
   const [recipes, setRecipes] = useState([]);
   const [response, setResponse] = useState({});
-  const { data: session } = useSession();
   const cart = useSelector((state) => state.slice.food);
+  const accessToken = Cookies.get('accessToken');
+  const refreshToken = Cookies.get('refreshToken');
+  const router = useRouter();
   const dispatch = useDispatch();
+  const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState('pizza');
-  console.log('cart', cart);
   useEffect(() => {
     async function fetchData() {
-      await axios
-        .post('/api/dashboard/getbycategory', { category: category })
-        .then((res) => {
-          setRecipes(res.data);
-        });
+      try {
+        await axios
+          .get('http://localhost:5000/api/food/?categoryId=1', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              refreshToken: `Bearer ${refreshToken}`,
+            },
+          })
+          .then((res) => {
+            setRecipes(res.data.data);
+          });
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert('Unauthenticated user!');
+          router.push('/auth/login');
+        } else {
+          console.log(err);
+          alert('Unauthenticated user!');
+          router.push('/auth/login');
+        }
+      }
     }
     fetchData();
   }, []);
 
-  const handleOnClick = async (name) => {
-    let val = name;
-    setCategory(val);
-    console.log(category);
-    console.log(name, category);
-    await axios
-      .post('/api/dashboard/getbycategory', { category: name })
-      .then((res) => {
-        setRecipes(res.data);
-      });
+  const handleOnClick = async (item) => {
+    try {
+      let val = item.name;
+      setCategory(val);
+      await axiosInstance
+        .get(`http://localhost:5000/api/food/?categoryId=${item.id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            refreshToken: `Bearer ${refreshToken}`,
+          },
+        })
+        .then((res) => {
+          setRecipes(res.data.data);
+        });
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert('Unauthenticated user!');
+        router.push('/');
+      } else {
+        alert('Unauthenticated user');
+        router.push('/');
+      }
+    }
   };
 
   const handleOnAdd = (props) => {
     const find = cart.find((item) => item.id === props.id);
-    console.log(find);
     if (find?.quantity === 5) {
       setResponse({ error: 'Cannot add more than 5 quantity' });
       setTimeout(() => {
@@ -83,11 +92,10 @@ const PopularRecipes = (props) => {
     }
     dispatch(
       sliceAction.addToCart({
-        id: props.id,
+        foodId: props.id,
         name: props.name,
         img: props.img,
         price: props.price,
-        user: session.user.email,
       })
     );
   };
@@ -129,11 +137,11 @@ const PopularRecipes = (props) => {
           overflowX: 'scroll',
         }}
       >
-        {categoryList.map((item) => {
+        {props?.category?.data?.map((item) => {
           return (
-            <>
+            <div key={item.id * Math.random()}>
               <Button
-                key={item._id}
+                key={item.id}
                 sx={{
                   maxWidth: 'unset',
                   width: '200px',
@@ -148,11 +156,11 @@ const PopularRecipes = (props) => {
                     color: '#fff',
                   },
                 }}
-                onClick={() => handleOnClick(item.name)}
+                onClick={() => handleOnClick(item)}
               >
                 {item.name}
               </Button>
-            </>
+            </div>
           );
         })}
       </Box>
@@ -179,9 +187,9 @@ const PopularRecipes = (props) => {
             },
           }}
         >
-          {recipes.map((item) => {
+          {recipes?.map((item) => {
             return (
-              <>
+              <div key={item.id * Math.random()}>
                 <SwiperSlide>
                   <Box
                     className="ds"
@@ -194,7 +202,7 @@ const PopularRecipes = (props) => {
                       borderRadius: '25px',
                       cursor: 'pointer',
                     }}
-                    key={item._id}
+                    key={item.id}
                     onClick={() => handleOnAdd(item)}
                   >
                     <Image
@@ -225,7 +233,7 @@ const PopularRecipes = (props) => {
                     </Typography>
                   </Box>
                 </SwiperSlide>
-              </>
+              </div>
             );
           })}
         </Swiper>

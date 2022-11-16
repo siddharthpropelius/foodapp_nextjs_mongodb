@@ -1,77 +1,98 @@
 import { Box, Container } from '@mui/material';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/layout/Navbar';
 import Head from 'next/head';
-import { getSession } from 'next-auth/react';
+import Cookies from 'js-cookie';
+import axiosInstance from '../../utils/axiosInstance';
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  if (!session) {
-    context.res.writeHead(302, { Location: '/' });
-    context.res.end;
-    return {};
-  }
-
-  let id = context.query.id;
-  const fetchOrderDetails = await fetch(
-    'http://localhost:3000/api/order/details',
-    { method: 'POST', body: id }
-  );
-
-  const res = await fetchOrderDetails.json();
-
-  //fetch metadata
-  const finalURL = 'orderdetail';
-  const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
-    method: 'POST',
-    body: finalURL,
-  });
-  const response = await fetchMetaData.json();
-
   return {
-    props: { response: res, res: response.res[0] },
+    props: {},
   };
 }
 
 const detail = (props) => {
-  let details = props.response[0];
+  const { query, router } = useRouter();
+  const orderId = query.id;
+  const accessToken = Cookies.get('accessToken');
+  const refreshToken = Cookies.get('refreshToken');
+  const [data, setData] = useState({});
+  useEffect(() => {
+    async function getOrder() {
+      try {
+        await axiosInstance
+          .get(`http://localhost:5000/api/orders?orderId=${orderId}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              refreshToken: `Bearer ${refreshToken}`,
+            },
+          })
+          .then((res) => {
+            setData(res.data);
+            console.log(res.data);
+          });
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert('Unauthenticated user!');
+          router.push('/');
+        } else {
+          alert('Something went wrong ! Please login again');
+          router.push('/');
+        }
+      }
+    }
+    getOrder();
+  }, []);
 
   return (
     <div>
       <Head>
-        <meta name="description" content={props?.res?.des} />
+        {/* <meta name="description" content={props?.res?.des} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{props?.res?.title}</title>
+        <title>{props?.res?.title}</title> */}
       </Head>
       <Navbar />
       <Container>
-        <div className="flex justify-center">
-          <Image
-            src={details.img}
-            alt={details.name}
-            width={300}
-            height={300}
-            objectFit="cover"
-            className="rounded-full"
-          />
-        </div>
-        <div className="flex justify-between max-w-[300px] mx-auto mt-6">
-          <p>Title</p>
-          <p>{details.name.toUpperCase()}</p>
-        </div>
-        <div className="flex justify-between max-w-[300px] mx-auto mt-6">
-          <p>Quantity</p>
-          <p>X{details.quantity}</p>
-        </div>
-        <div className="flex justify-between max-w-[300px] mx-auto mt-6">
-          <p>Price</p>
-          <p>₹{details.price}</p>
-        </div>
-
-        <div className="flex justify-between max-w-[300px] mx-auto mt-6">
-          <p>Total</p>
-          <p>₹{details.quantity * details.price}</p>
+        <div className="flex  justify-center ">
+          {data?.data?.map((item) => {
+            return (
+              <div key={item.id} className="">
+                {item.items.map((item) => {
+                  return (
+                    <div
+                      key={item.id}
+                      className="w-full flex justify-between gap-16 py-1"
+                    >
+                      <Image
+                        src={item.fooditems.img}
+                        alt={item.fooditems.name}
+                        width={100}
+                        height={100}
+                        objectFit="cover"
+                        className="rounded-ful"
+                      />
+                      <p>{item.fooditems.name}</p>
+                      <p>X{item.quantity}</p>
+                    </div>
+                  );
+                })}
+                <div className="flex justify-between">
+                  <p>Discount</p>
+                  <p>₹{(item.subtotal * item.discount) / 100}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p>SubTotal</p>
+                  <p>₹{item.subtotal}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p>Total</p>
+                  <p>₹{item.total}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Container>
     </div>

@@ -21,7 +21,7 @@ const Navbar = () => {
             <Link href="/home"> NoodleTown</Link>
           </h1>
 
-          <ul className="flex ">
+          <ul className="flex mx-2">
             <li className="p-4 cursor-pointer">
               <Link href="/menu">
                 <IconButton aria-label="cart">

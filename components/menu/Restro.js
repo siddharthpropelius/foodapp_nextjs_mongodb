@@ -1,14 +1,18 @@
 import { Box, Container, Typography } from '@mui/material';
+import axiosInstance from '../../utils/axiosInstance';
 import Image from 'next/future/image';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 const Restro = (props) => {
+  console.log(props.data.restaurant.data);
   const router = useRouter();
 
-  const handleClick = (id) => {
-    router.push(`/restro/${id}`);
+  const handleClick = (item) => {
+    router.push(`/restro/${item.id}`);
   };
+
   return (
     <>
       <Container maxWidth="lg">
@@ -17,26 +21,29 @@ const Restro = (props) => {
         </Typography>
         <Box
           sx={{
+            width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
-            overflowX: 'scroll',
+            overflowX: 'auto',
             gap: '20px',
             mt: '30px',
-            px: 2,
+            px: 0,
           }}
         >
-          {props.data.map((item) => {
+          {props.data.restaurant.data?.map((item) => {
             return (
-              <div key={item._id}>
-                <Image
-                  src={item.img}
-                  alt={item.name}
-                  width={120}
-                  height={120}
-                  overflowX="scroll"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => handleClick(item.Rid)}
-                />
+              <div key={item.id}>
+                <Box sx={{ maxWidth: 'unset', width: '100px' }}>
+                  <Image
+                    src={item.img}
+                    alt={item.name}
+                    width={120}
+                    height={120}
+                    overflow="scroll"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleClick(item)}
+                  />
+                </Box>
               </div>
             );
           })}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,7 +15,6 @@ import { sliceAction } from '../../redux/slice/slice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import jwt_decode from 'jwt-decode';
 
 export const IconTextField = ({ iconStart, iconEnd, InputProps, ...props }) => {
   return (
@@ -41,6 +40,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const router = useRouter();
   const dispatch = useDispatch();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -141,6 +141,15 @@ export default function Login() {
           >
             Sign In
           </Button>
+          <Typography sx={{ paddingLeft: 1 }}>
+            New User{' '}
+            <span
+              className="text-[#FFC200] font-bold hover:underline cursor-pointer"
+              onClick={() => router.push('/auth/register')}
+            >
+              Register here{' '}
+            </span>
+          </Typography>
           <Typography sx={{ color: 'red' }}>{error}</Typography>
         </Box>
       </Box>

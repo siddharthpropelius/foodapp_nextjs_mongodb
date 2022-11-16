@@ -1,11 +1,7 @@
 import { Box, Container, Typography } from '@mui/material';
-import axios from 'axios';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
 
 const Name = (props) => {
-
   return (
     <div>
       <Container>
@@ -18,14 +14,16 @@ const Name = (props) => {
           >
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <Image
-                src={props.data[0]?.img}
+                src={props?.restaurant?.restaurant?.data?.img}
                 alt="food"
                 width={200}
-                height={100}
+                height={200}
               />
             </Box>
             <Box sx={{ ml: '30px', mt: '20px' }}>
-              <Typography variant="h5">{props.data[0]?.name}</Typography>
+              <Typography variant="h5">
+                {props?.restaurant?.restaurant?.data?.name}
+              </Typography>
               <Box
                 sx={{
                   display: 'flex',
@@ -35,14 +33,16 @@ const Name = (props) => {
               >
                 <Box sx={{ paddingY: '10px' }}>
                   <Typography sx={{ color: '#999999' }}>
-                    {props.data[0]?.des}
+                    {props?.restaurant?.restaurant?.data?.description}
                   </Typography>
                   <Typography sx={{ color: '#999999' }}>
-                    {props.data[0]?.location}
+                    {props?.restaurant?.restaurant?.data?.location}
                   </Typography>
                   <Typography>
-                    <span style={{ color: '#C84B11' }}>Open Now </span>11pm -
-                    11pm (Today)
+                    <span style={{ color: '#C84B11' }}>Open Now </span>
+                    {props?.props?.restaurant?.restaurant?.data?.opens_at}pm -
+                    {props?.props?.restaurant?.restaurant?.data?.close_at}pm
+                    (Today)
                   </Typography>
                 </Box>
                 <Box>

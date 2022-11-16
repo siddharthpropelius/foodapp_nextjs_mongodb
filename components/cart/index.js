@@ -1,26 +1,43 @@
-import { Container, Typography } from '@mui/material';
+import { Button, Container, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/material';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import CartCard from './CartCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSession } from 'next-auth/react';
-import { sliceAction } from '../../redux/slice/slice';
+import slice, { sliceAction } from '../../redux/slice/slice';
+import axiosInstance from '../../utils/axiosInstance';
+import Cookies from 'js-cookie';
 
 const Index = () => {
   const cart = useSelector((state) => state.slice.food);
   const total = useSelector((state) => state.slice.total);
+  const newTotal = useSelector((state) => state.slice.newTotal);
+  const discount = useSelector((state) => state.slice.discount);
+  const haveCoupon = useSelector((state) => state.slice.couponName);
+
   const [response, setResponse] = useState('');
   const [qty, setQty] = useState(0);
+  const [coupon, setCoupon] = useState('');
   const router = useRouter();
-  const { data: session } = useSession();
   const dispatch = useDispatch();
+  const accessToken = Cookies.get('accessToken');
+  const refreshToken = Cookies.get('refreshToken');
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
+  console.log(discount);
 
-  const handleOrderBtn = () => {
-    axios.post('/api/order/add', { cart }).then((res) => {
-      console.log(res.data);
-      setResponse(res.data);
+  const handleOrderBtn = async () => {
+    try {
+      await axiosInstance.post(
+        'http://localhost:5000/api/orders',
+        { items: cart, discount: discount },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            refreshToken: `Bearer ${refreshToken}`,
+          },
+        }
+      );
+      setResponse('Order Placed SuccessFully');
       setTimeout(() => {
         setResponse('');
         router.push('/order');
@@ -28,7 +45,27 @@ const Index = () => {
           dispatch(sliceAction.reset());
         }, 1000);
       }, 1000);
-    });
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert('Unauthenticated user!');
+        router.push('/');
+      } else {
+        console.log(err);
+        alert('something went wrong! please login again');
+        // router.push('/');
+      }
+    }
+  };
+
+  const couponHandler = () => {
+    dispatch(sliceAction.addCoupon(coupon));
+    setIsCouponApplied(true);
+  };
+
+  const removeCoupon = () => {
+    console.log('clicked');
+    dispatch(sliceAction.removeCoupon(discount));
+    setIsCouponApplied(false);
   };
   return (
     <div>
@@ -66,9 +103,9 @@ const Index = () => {
               <Box sx={{ display: 'flex', flexDirection: 'column', flex: 2 }}>
                 {cart?.map((item) => {
                   return (
-                    <div key={item._id}>
+                    <div key={item.id}>
                       <CartCard
-                        id={item.id}
+                        id={item.foodId}
                         item={item.item}
                         name={item.name}
                         price={item.price}
@@ -94,15 +131,52 @@ const Index = () => {
                   <p className="font-bold text-xl">₹{total}</p>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <p className="font-bold text-xl">Delivery Charge :</p>
-                  <p className="font-bold text-xl">₹15</p>
+                  {isCouponApplied ? (
+                    <>
+                      <Typography sx={{ color: 'green' }}>
+                        COUPON APPLIED: {haveCoupon.toUpperCase()}{' '}
+                        <span
+                          className="text-red-900 cursor-pointer"
+                          onClick={removeCoupon}
+                        >
+                          REMOVE
+                        </span>
+                      </Typography>
+                    </>
+                  ) : (
+                    <>
+                      <TextField
+                        onChange={(e) => setCoupon(e.target.value)}
+                        id="outlined-basic"
+                        label="have a coupon apply here"
+                        variant="outlined"
+                        required
+                        value={coupon.toUpperCase()}
+                      />
+                      <Button
+                        variant="contained"
+                        sx={{
+                          marginX: '6px',
+                          marginTop: '10px',
+                          color: '#FFFFFF',
+                          backgroundColor: '#F6B716',
+                          '&:hover': {
+                            backgroundColor: '#F6B711',
+                          },
+                        }}
+                        onClick={() => couponHandler()}
+                      >
+                        Apply
+                      </Button>
+                    </>
+                  )}
                 </div>
 
                 <br />
                 <hr />
                 <div className="flex justify-between pb-4">
                   <p className="font-bold text-xl">Total :</p>
-                  <p className="font-bold text-xl">₹{total + 15}</p>
+                  <p className="font-bold text-xl">₹{newTotal}</p>
                 </div>
                 <hr />
               </div>

@@ -3,49 +3,57 @@ import Hero from '../../components/home/Hero';
 import NavBar from '../../components/layout/Navbar';
 import PopularRecipes from '../../components/home/PopularRecipes';
 import PosterContainer from '../../components/home/PosterContainer';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
 import Head from 'next/head';
-import { getSession } from 'next-auth/react';
+import axiosInstance from '../../utils/axiosInstance';
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  if (!session) {
-    context.res.writeHead(302, { Location: '/' });
-    context.res.end;
-    return {};
-  }
-  const url = context.req.url;
-  // const finalURL = url.substring(1);
-  const finalURL = 'home';
-  const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
-    method: 'POST',
-    body: finalURL,
-  });
-  const response = await fetchMetaData.json();
+  try {
+    const cookie = context.req.cookies;
+    const fetchMetaData = await fetch(
+      'http://localhost:5000/api/meta/by-id?metaId=1',
+      {
+        method: 'GET',
+      }
+    );
+    const response = await fetchMetaData.json();
 
-  return {
-    props: { res: response.res[0] },
-  };
+    const getCategory = await axiosInstance.get(
+      'http://localhost:5000/api/category/',
+      {
+        headers: {
+          Authorization: `Bearer ${cookie.accessToken}`,
+          refreshToken: `Bearer ${cookie.refreshToken}`,
+        },
+      }
+    );
+    const responseCategory = await getCategory;
+    return {
+      props: { meta: response.data, category: responseCategory.data },
+    };
+  } catch (err) {
+    const error = err;
+    console.log(error);
+    return {
+      props: {},
+    };
+  }
 }
 
 export default function Home(props) {
-  const data = useSelector((state) => state.slice.cart);
-  const handleOnAdd = () => {
-    axios.post('/api/cart/add', { data }).then((res) => {});
-  };
+  console.log(props);
   return (
     <div>
       <Head>
-        <meta name="description" content={props?.res?.des} />
+        <meta name="description" content={props?.meta?.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{props?.res?.title}</title>
-        {/* <title>Home</title> */}
+        <meta name="keywords" content={props?.meta?.keywords} />
+        <meta name="author" content={props?.meta?.author} />
+        <title>{props?.meta?.name}</title>
       </Head>
       <NavBar />
       <Hero />
       <HeaderCard />
-      <PopularRecipes handler={handleOnAdd} />
+      <PopularRecipes category={props.category} />
       <PosterContainer />
     </div>
   );

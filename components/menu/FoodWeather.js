@@ -6,7 +6,9 @@ import i1 from '../../assets/i1.png';
 import i2 from '../../assets/i2.png';
 import i3 from '../../assets/i3.png';
 import FoodWeatherCard from './FoodWeatherCard';
-import axios from 'axios';
+import Cookies from 'js-cookie';
+import axiosInstance from '../../utils/axiosInstance';
+import { useRouter } from 'next/router';
 
 const FoodWeather = () => {
   const imgData = [
@@ -32,14 +34,35 @@ const FoodWeather = () => {
   ];
 
   const [filtereddata, setFilteredData] = useState([]);
+  const accessToken = Cookies.get('accessToken');
+  const refreshToken = Cookies.get('refreshToken');
+  const router = useRouter();
   useEffect(() => {
     const fetchAPI = async () => {
-      const data = await axios.get('/api/dashboard/view');
-      const result = data.data.res;
-      const newDAta = [...result];
-      const sort = newDAta.sort(() => Math.random() - Math.random());
-      const randomData = sort.splice(1, 6);
-      setFilteredData(randomData);
+      try {
+        const data = await axiosInstance.get(
+          'http://localhost:5000/api/food/',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              refreshToken: `Bearer ${refreshToken}`,
+            },
+          }
+        );
+        const result = data.data.data;
+        const newDAta = [...result];
+        const sort = newDAta.sort(() => Math.random() - Math.random());
+        const randomData = sort.splice(1, 6);
+        setFilteredData(randomData);
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert('Unauthenticated User');
+          router.push('/');
+        } else {
+          alert('Unauthenticated User!');
+          router.push('/');
+        }
+      }
     };
     fetchAPI();
   }, []);
@@ -61,35 +84,52 @@ const FoodWeather = () => {
         >
           {filtereddata.map((item) => {
             return (
-              <>
+              <div key={item.id}>
                 <FoodWeatherCard
-                  key={item._id}
+                  key={item.id}
                   name={item.name}
-                  id={item._id}
+                  id={item.id}
                   price={item.price}
                   img={item.img}
                   time={item.time}
-                  des={item.des}
+                  des={item.description}
                   // quantity={item.quantity}
                 />
-              </>
+              </div>
             );
           })}
         </Box>
         <Box
           sx={{
+            width: '100%',
+            maxWidth: 'unset',
             display: 'flex',
             gap: '10px',
             mt: '50px',
             mb: '40px',
-            flexWrap: 'no wrap',
+            mx: 'auto',
+            alignItems: 'center',
+            overflowX: 'scroll',
+            overflowY: 'hidden',
           }}
         >
           {imgData.map((item) => {
             return (
-              <>
-                <Box key={item.id}>
-                  <Image src={item.img} alt={item.primary} />
+              <div key={item.id} className="mx-auto">
+                <Box
+                  key={item.id}
+                  sx={{
+                    width: '350px',
+                    height: '400px',
+                    maxWidth: 'unset',
+                  }}
+                >
+                  <Image
+                    src={item.img}
+                    alt={item.primary}
+                    className="w-[350px]"
+                    style={{ maxWidth: 'unset' }}
+                  />
                   <Typography
                     variant="h6"
                     sx={{
@@ -105,9 +145,9 @@ const FoodWeather = () => {
                       color: 'white',
                     }}
                   >
-                    {item.primary}
+                    {item.primary.toUpperCase()}
                   </Typography>
-                  <Typography
+                  {/* <Typography
                     variant="p"
                     sx={{
                       fontSize: '16px',
@@ -119,9 +159,9 @@ const FoodWeather = () => {
                     }}
                   >
                     {item.secondery}
-                  </Typography>
+                  </Typography> */}
                 </Box>
-              </>
+              </div>
             );
           })}
         </Box>

@@ -2,12 +2,10 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 import { sliceAction } from '../../redux/slice/slice';
 
 const CartCard = ({ id, name, img, price, quantity }) => {
-  const { data: session } = useSession();
   const [response, setResponse] = useState('');
   const dispatch = useDispatch();
   const addToCart = () => {
@@ -18,7 +16,7 @@ const CartCard = ({ id, name, img, price, quantity }) => {
       }, 1000);
     }
     dispatch(
-      sliceAction.addToCart({ id: id, name: name, price: price, quantity })
+      sliceAction.addToCart({ foodId: id, name: name, price: price, quantity })
     );
   };
 

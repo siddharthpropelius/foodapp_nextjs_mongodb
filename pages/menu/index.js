@@ -2,49 +2,52 @@ import Head from 'next/head';
 import Navbar from '../../components/layout/Navbar';
 import FoodWeather from '../../components/menu/FoodWeather';
 import Restro from '../../components/menu/Restro';
-import { getSession } from 'next-auth/react';
+import axiosInstance from '../../utils/axiosInstance';
 
 export async function getServerSideProps(context) {
-  //auth
-  const session = await getSession(context);
-  if (!session) {
-    context.res.writeHead(302, { Location: '/' });
-    context.res.end;
-    return {};
+  try {
+    const cookie = context.req.cookies;
+    //get metadata from server
+    const fetchMetaData = await fetch(
+      'http://localhost:5000/api/meta/by-id?metaId=2'
+    );
+    const response = await fetchMetaData.json();
+
+    const getRestaurants = await axiosInstance.get(
+      'http://localhost:5000/api/restaurant',
+      {
+        headers: {
+          Authorization: `Bearer ${cookie.accessToken}`,
+          refreshToken: `Bearer ${cookie.refreshToken}`,
+        },
+      }
+    );
+    const restaurantResult = await getRestaurants;
+    return {
+      props: { response, restaurant: restaurantResult.data },
+    };
+  } catch (err) {
+    const error = err;
+
+    console.log('err', error);
+    return {
+      props: { error: error },
+    };
   }
-
-  //get metadata from server
-  const url = context.req.url;
-  // const finalURL = url.substring(1);
-  const finalURL = 'menu';
-  const fetchMetaData = await fetch('http://localhost:3000/api/metadata', {
-    method: 'POST',
-    body: finalURL,
-  });
-  const response = await fetchMetaData.json();
-
-  //getting list of restaurants from database
-
-  const res = await fetch('http://localhost:3000/api/restro/getrestro');
-  const result = await res.json();
-
-  return {
-    props: { response, res: result.res },
-  };
 }
 
 export default function Index(props) {
   return (
     <div>
       <Head>
-        <meta name="description" content={props?.response?.res[0]?.des} />
+        <meta name="description" content={props?.response?.data?.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{props?.response?.res[0]?.title}</title>
-        <title>Menu</title>
+        <meta name="author" content={props?.response?.data?.author} />
+        <title>{props?.response?.data.name}</title>
       </Head>
       <Navbar />
-      <Restro data={props.res} />
-      <FoodWeather />
+      <Restro data={props} />
+      <FoodWeather data={props} />
     </div>
   );
 }

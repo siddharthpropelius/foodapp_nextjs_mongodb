@@ -1,19 +1,16 @@
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import Image from 'next/image';
-import React from 'react';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { sliceAction } from '../../redux/slice/slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const CategoryCard = ({ id, name, des, price, img, category }) => {
   const cart = useSelector((state) => state.slice.food);
-  const { data: session } = useSession();
   const [response, setResponse] = useState({});
   const dispatch = useDispatch();
-  const user = session?.user?.email;
-  const addToCart = ({ id, name, img, price }) => {
+
+  const addToCart = ({ foodId, name, img, price }) => {
     const find = cart.find((item) => item.id === id);
     if (find?.quantity === 5) {
       setResponse({ error: 'Cannot add more than 5 quantity' });
@@ -28,11 +25,10 @@ const CategoryCard = ({ id, name, des, price, img, category }) => {
     }
     dispatch(
       sliceAction.addToCart({
-        id: id,
+        foodId: foodId,
         name: name,
         img: img,
         price: price,
-        user: user,
       })
     );
   };
@@ -65,6 +61,7 @@ const CategoryCard = ({ id, name, des, price, img, category }) => {
               height: '186px',
               borderRadius: '20px',
             }}
+            className="object-cover"
           />
         </Box>
         <Box sx={{ pl: '20px', pt: '20px', justifyContent: 'center' }}>
@@ -79,13 +76,12 @@ const CategoryCard = ({ id, name, des, price, img, category }) => {
               <button
                 onClick={() =>
                   addToCart({
-                    id: id,
+                    foodId: id,
                     name: name,
                     time: 15,
                     img: img,
                     price: price,
                     des: des,
-                    category: category,
                   })
                 }
                 className="bg-[#FFC300] text-white p-1 rounded-md"

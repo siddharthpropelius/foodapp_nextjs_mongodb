@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,11 +11,10 @@ import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import MailIcon from '@mui/icons-material/Mail';
 import axios from 'axios';
-import { sliceAction } from '../../redux/slice/slice';
+import PersonIcon from '@mui/icons-material/Person';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import jwt_decode from 'jwt-decode';
 
 export const IconTextField = ({ iconStart, iconEnd, InputProps, ...props }) => {
   return (
@@ -34,26 +33,30 @@ export const IconTextField = ({ iconStart, iconEnd, InputProps, ...props }) => {
   );
 };
 
-export default function Login() {
+export default function Register() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
   const dispatch = useDispatch();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const checkLogin = await axios.post(
-        'http://localhost:5000/api/user/login',
-        { email: email, password: password }
-      );
+      const checkLogin = await axios.post('http://localhost:5000/api/user', {
+        name: name,
+        email: email,
+        password: password,
+      });
       if (checkLogin.status === 200) {
         Cookies.set('accessToken', checkLogin.data.accessToken);
         Cookies.set('refreshToken', checkLogin.data.refreshToken);
         router.push('/home');
       }
     } catch (err) {
+      console.log(err);
       // setError(err.response.data.message);
     }
   };
@@ -89,9 +92,22 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login In
+          REGISTER
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <IconTextField
+            required
+            sx={{ mt: 1 }}
+            fullWidth
+            label="Name"
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+            iconEnd={
+              <IconButton edge="end">
+                <PersonIcon />
+              </IconButton>
+            }
+          />
           <IconTextField
             required
             sx={{ mt: 1 }}
@@ -139,8 +155,17 @@ export default function Login() {
               },
             }}
           >
-            Sign In
+            Register
           </Button>
+          <Typography sx={{ paddingLeft: 1 }}>
+            Already Registered{' '}
+            <span
+              className="text-[#FFC200] font-bold hover:underline cursor-pointer"
+              onClick={() => router.push('/auth/login')}
+            >
+              Login here{' '}
+            </span>
+          </Typography>
           <Typography sx={{ color: 'red' }}>{error}</Typography>
         </Box>
       </Box>

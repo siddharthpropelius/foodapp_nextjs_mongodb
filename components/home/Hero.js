@@ -11,7 +11,6 @@ const Hero = () => {
   const [text, setText] = useState('');
   const router = useRouter();
   const txtRef = useRef();
-  console.log(text);
 
   const StyledDiv = styled('div')({
     position: 'relative',
@@ -21,8 +20,6 @@ const Hero = () => {
   });
 
   const handleSearch = (e) => {
-    // console.log(e.target.value);
-    console.log(txtRef.current.value);
     // setText(e.target.value);
   };
   return (

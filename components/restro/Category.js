@@ -1,42 +1,54 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosInstance';
 import { useRouter } from 'next/router';
-
+import Cookies from 'js-cookie';
 import CategoryCard from './CategoryCard';
-import { Sort } from '@mui/icons-material';
 
 const Category = (props) => {
+  const accessToken = Cookies.get('accessToken');
+  const refreshToken = Cookies.get('refreshToken');
+
   const router = useRouter();
   let id = router.query.id;
-  const [category, setCategory] = useState('Recommended');
+  let category = 'recommended';
+  const [categoryName, setCategoryName] = useState('');
   const [data, setData] = useState([]);
   useEffect(() => {
     Recommended();
   }, []);
 
   const Recommended = async () => {
-    axios
-      .post('/api/restro/getfoodbycategory', {
-        Rid: id,
-        category: category.toLowerCase(),
+    let category = 'Recommended';
+    axiosInstance
+      .get(`http://localhost:5000/api/food/?restaurantId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          refreshToken: `Bearer ${refreshToken}`,
+        },
       })
       .then((res) => {
-        const sort = res.data.res.sort(() => Math.random() - Math.random());
-        setData(sort);
+        setData(res.data.data);
+        setCategoryName('recommended');
       });
   };
 
-  const onClickHandler = async (name) => {
-    await axios
-      .post('/api/restro/getfoodbycategory', {
-        Rid: id,
-        category: name.toLowerCase(),
-      })
+  const onClickHandler = async (item) => {
+    let category = item.name;
+    await axiosInstance
+      .get(
+        `http://localhost:5000/api/food/?restaurantId=${id}&categoryId=${item.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            refreshToken: `Bearer ${refreshToken}`,
+          },
+        }
+      )
       .then((res) => {
-        setData(res.data.res);
+        setData(res.data.data);
+        setCategoryName(category);
       });
-    setCategory(name);
   };
 
   return (
@@ -59,20 +71,33 @@ const Category = (props) => {
             textAlign: { md: 'left', xs: 'center' },
           }}
         >
-          {props?.data[0]?.category?.map((item) => {
+          <Typography
+            onClick={() => Recommended()}
+            sx={{
+              cursor: 'pointer',
+              p: '10px',
+              flex: 4,
+              color: 'recommended' == categoryName ? 'white' : 'black',
+              backgroundColor: 'recommended' == categoryName ? '#FFC300' : '',
+            }}
+          >
+            RECOMMENDED
+          </Typography>
+          {props.data.restaurant.data.category.map((item) => {
             return (
               <>
                 <Typography
                   onClick={() => onClickHandler(item)}
                   sx={{
                     cursor: 'pointer',
-                    color: item == category ? 'white' : 'black',
-                    backgroundColor: item == category ? '#FFC300' : '',
+                    color: item.name == categoryName ? 'white' : 'black',
+                    backgroundColor: item.name == categoryName ? '#FFC300' : '',
                     p: '10px',
                     flex: 4,
                   }}
+                  key={item.id}
                 >
-                  {item}
+                  {item.name.toUpperCase()}
                 </Typography>
               </>
             );
@@ -83,13 +108,14 @@ const Category = (props) => {
             return (
               <>
                 <CategoryCard
-                  id={item._id}
+                  key={item.id}
+                  id={item.id}
                   name={item.name}
                   category={item.category}
                   des={item.description}
                   price={item.price}
                   img={item.img}
-                  tIme="15"
+                  time="15"
                 />
               </>
             );

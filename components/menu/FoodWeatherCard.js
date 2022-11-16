@@ -2,17 +2,13 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import axios from 'axios';
 import { sliceAction } from '../../redux/slice/slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const FoodWeatherCard = ({ id, name, img, price }) => {
-  const { data: session } = useSession();
   const [response, setResponse] = useState({});
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.slice.food);
-  const user = session.user.email;
 
   const handleOnClick = () => {
     const find = cart.find((item) => item.id === id);
@@ -27,7 +23,10 @@ const FoodWeatherCard = ({ id, name, img, price }) => {
         setResponse('');
       }, 1000);
     }
-    dispatch(sliceAction.addToCart({ id, name, img, price, user }));
+    console.log(id)
+    dispatch(
+      sliceAction.addToCart({ foodId: id, name: name, img: img, price: price })
+    );
   };
   return (
     <>

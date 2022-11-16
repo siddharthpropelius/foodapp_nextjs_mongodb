@@ -1,9 +1,41 @@
 import { Box, Container, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axiosInstance from '../../utils/axiosInstance';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
-const index = ({ orders }) => {
+const index = () => {
+  const accessToken = Cookies.get('accessToken');
+  const refreshToken = Cookies.get('refreshToken');
+  const [data, setData] = useState([]);
+  const router = useRouter();
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        await axiosInstance
+          .get('http://localhost:5000/api/orders', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              refreshToken: `Bearer ${refreshToken}`,
+            },
+          })
+          .then((res) => {
+            setData(res.data.data);
+          });
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert('Unauthenticated User!');
+          router.push('/');
+        } else {
+          alert('Unauthenticated User!');
+          router.push('/');
+        }
+      }
+    }
+    fetchOrders();
+  }, []);
   return (
     <div>
       <Container>
@@ -19,7 +51,7 @@ const index = ({ orders }) => {
             gap: 5,
           }}
         >
-          {orders.length === 0 ? (
+          {data.length === 0 ? (
             <Box
               sx={{ display: 'flex', justifyContent: 'center', mt: '100px' }}
             >
@@ -38,26 +70,25 @@ const index = ({ orders }) => {
             </Box>
           ) : (
             <>
-              {orders?.map((item) => {
+              {data?.map((item) => {
                 return (
                   <>
                     <Box
-                      key={item._id}
+                      key={item.id}
                       sx={{ border: '1px solid black', borderRadius: '5px' }}
                     >
                       <Image
-                        src={item.img}
+                        src={item.items[0].fooditems.img}
                         width={250}
                         height={250}
                         alt={item.name}
                         objectFit="cover"
-                        className=""
                       />
                       <Typography sx={{ px: 1 }}>
-                        {item.name.toUpperCase()}
+                        {item.items[0].fooditems.name}
                       </Typography>
                       <p className="px-2 pb-1 hover:underline cursor-pointer">
-                        <Link href={`/order/${item._id}`}> View Details</Link>
+                        <Link href={`/order/${item.id}`}> View Details</Link>
                       </p>
                     </Box>
                   </>

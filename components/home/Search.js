@@ -1,14 +1,12 @@
 import { Box, Container, TextField, Typography } from '@mui/material';
-import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSession } from 'next-auth/react';
 import { sliceAction } from '../../redux/slice/slice';
 
 const Search = ({ search }) => {
-  const { data: session } = useSession();
+  console.log(search);
   const router = useRouter();
   const txtRef = useRef();
   const id = router.query.id;
@@ -18,13 +16,13 @@ const Search = ({ search }) => {
   const cart = useSelector((state) => state.slice.food);
 
   const handleOnClick = (item) => {
-    const user = session.user.email;
-    const id = item._id;
+    const foodId = item.id;
     const name = item.name;
     const img = item.img;
     const price = item.price;
 
-    const find = cart.find((item) => item.id === id);
+    const find = cart.find((item) => item.foodId === foodId);
+    console.log(find);
     if (find?.quantity === 5) {
       setResponse({ error: 'Cannot add more than 5 quantity' });
       setTimeout(() => {
@@ -36,7 +34,7 @@ const Search = ({ search }) => {
         setResponse('');
       }, 1000);
     }
-    dispatch(sliceAction.addToCart({ id, name, img, price, user }));
+    dispatch(sliceAction.addToCart({ foodId, name, img, price }));
   };
   return (
     <div>
@@ -72,7 +70,7 @@ const Search = ({ search }) => {
               gap: 5,
             }}
           >
-            {search.res.length === 0 ? (
+            {search.length === 0 ? (
               <Box
                 sx={{ display: 'flex', justifyContent: 'center', mt: '100px' }}
               >
@@ -91,11 +89,10 @@ const Search = ({ search }) => {
               </Box>
             ) : (
               <>
-                {search.res?.map((item) => {
+                {search?.map((item) => {
                   return (
-                    <>
+                    <div key={item.id}>
                       <Box
-                        key={item._id}
                         sx={{
                           border: '1px solid black',
                           borderRadius: '5px',
@@ -114,11 +111,9 @@ const Search = ({ search }) => {
                         <Typography sx={{ px: 1 }}>
                           {item.name.toUpperCase()}
                         </Typography>
-                        <p className="px-2 pb-1 hover:underline cursor-pointer">
-                          {/* <Link href={`/order/${item._id}`}> View Details</Link> */}
-                        </p>
+                        <Typography sx={{ px: 1 }}>₹{item.price}</Typography>
                       </Box>
-                    </>
+                    </div>
                   );
                 })}
               </>

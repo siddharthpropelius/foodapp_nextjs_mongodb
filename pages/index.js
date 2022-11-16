@@ -1,18 +1,13 @@
 import Login from '../components/auth/Login';
-import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import jwt_decode from 'jwt-decode';
+import dayjs from 'dayjs';
 
 export default function Home() {
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  if (session) {
-    router.push('/home');
-  } else {
-    return (
-      <div>
-        <Login />
-      </div>
-    );
-  }
+  return (
+    <>
+      <Login />
+    </>
+  );
 }
