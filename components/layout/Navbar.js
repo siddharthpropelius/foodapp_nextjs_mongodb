@@ -1,18 +1,29 @@
-import { Container, IconButton, Badge } from '@mui/material';
-import Link from 'next/link';
-import React from 'react';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LogoutIcon from '@mui/icons-material/Logout';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import styled from '@emotion/styled';
-import { signOut } from 'next-auth/react';
-import { useSelector } from 'react-redux';
-
+import { Container, IconButton, Badge } from "@mui/material";
+import Link from "next/link";
+import React from "react";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCartOutlined";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import HomeIcon from "@mui/icons-material/Home";
+import styled from "@emotion/styled";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
+import { sliceAction } from "../../redux/slice/slice";
 const Navbar = () => {
   const StyledBadge = styled(Badge)(({ theme }) => ({}));
   const qty = useSelector((state) => state.slice.qty);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const handleOnLogout = () => {
+    Cookies.remove("accessToken", { path: "" });
+    Cookies.remove("refreshToken", { path: "" });
+    dispatch(sliceAction.reset());
+    router.push("/");
+  };
   return (
     <div className="bg-[white] z-999 overflow-hidden">
       <Container>
@@ -23,8 +34,16 @@ const Navbar = () => {
 
           <ul className="flex mx-2">
             <li className="p-4 cursor-pointer">
+              <Link href="/home">
+                <IconButton aria-label="home">
+                  <HomeIcon />
+                </IconButton>
+              </Link>
+            </li>
+
+            <li className="p-4 cursor-pointer">
               <Link href="/menu">
-                <IconButton aria-label="cart">
+                <IconButton aria-label="menu">
                   <RestaurantMenuIcon />
                 </IconButton>
               </Link>
@@ -41,23 +60,23 @@ const Navbar = () => {
             </li>
             <li className="p-4 cursor-pointer">
               <Link href="/order">
-                <IconButton aria-label="cart">
+                <IconButton aria-label="orders">
                   <ShoppingBagIcon />
                 </IconButton>
               </Link>
             </li>
             <li className="p-4 cursor-pointer">
               <Link href="/account">
-                <IconButton aria-label="cart">
+                <IconButton aria-label="account">
                   <AccountCircleIcon />
                 </IconButton>
               </Link>
             </li>
             <li
-              className="p-4 cursor-pointer"
-              onClick={() => signOut('google', { callbackUrl: 'http://localhost:3000/' })}
+              className="p-4 cursor-pointer hidden lg:block"
+              onClick={handleOnLogout}
             >
-              <IconButton aria-label="cart">
+              <IconButton aria-label="logout">
                 <LogoutIcon />
               </IconButton>
             </li>

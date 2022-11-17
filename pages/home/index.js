@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
     );
     const responseCategory = await getCategory;
     return {
-      props: { meta: response.data, category: responseCategory.data },
+      props: { meta: response.data, category: responseCategory.data ,accessToken:cookie.accessToken , refreshToken:cookie.refreshToken},
     };
   } catch (err) {
     const error = err;
@@ -53,7 +53,7 @@ export default function Home(props) {
       <NavBar />
       <Hero />
       <HeaderCard />
-      <PopularRecipes category={props.category} />
+      <PopularRecipes category={props.category} accessToken={props.accessToken} refreshToken={props.refreshToken}/>
       <PosterContainer />
     </div>
   );

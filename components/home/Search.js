@@ -1,9 +1,9 @@
-import { Box, Container, TextField, Typography } from '@mui/material';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { sliceAction } from '../../redux/slice/slice';
+import { Box, Container, TextField, Typography } from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React, { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { sliceAction } from "../../redux/slice/slice";
 
 const Search = ({ search }) => {
   console.log(search);
@@ -24,14 +24,14 @@ const Search = ({ search }) => {
     const find = cart.find((item) => item.foodId === foodId);
     console.log(find);
     if (find?.quantity === 5) {
-      setResponse({ error: 'Cannot add more than 5 quantity' });
+      setResponse({ error: "Cannot add more than 5 quantity" });
       setTimeout(() => {
         setResponse({});
       }, 1000);
     } else {
-      setResponse({ success: 'Item added to cart' });
+      setResponse({ success: "Item added to cart" });
       setTimeout(() => {
-        setResponse('');
+        setResponse("");
       }, 1000);
     }
     dispatch(sliceAction.addToCart({ foodId, name, img, price }));
@@ -42,7 +42,7 @@ const Search = ({ search }) => {
         <Container>
           <TextField
             onKeyPress={(ev) => {
-              if (ev.key === 'Enter') {
+              if (ev.key === "Enter") {
                 ev.preventDefault();
                 const input = txtRef.current.value;
                 router.push(`/home/${input}`);
@@ -52,39 +52,40 @@ const Search = ({ search }) => {
             }}
             label="Search for restuarant, cuisine, place"
             inputRef={txtRef}
+            value={id}
             variant="filled"
             fullWidth
           />
-          <Typography sx={{ mt: 1, ml: 1, color: 'red' }}>
+          <Typography sx={{ mt: 1, ml: 1, color: "red" }}>
             {response.error}
           </Typography>
-          <Typography sx={{ mt: 1, ml: 1, color: 'green' }}>
+          <Typography sx={{ mt: 1, ml: 1, color: "green" }}>
             {response.success}
           </Typography>
           <Box
             sx={{
               mt: 2,
-              display: 'flex',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
               gap: 5,
             }}
           >
             {search.length === 0 ? (
               <Box
-                sx={{ display: 'flex', justifyContent: 'center', mt: '100px' }}
+                sx={{ display: "flex", justifyContent: "center", mt: "100px" }}
               >
                 <Typography
                   sx={{
                     fontSize: {
-                      md: '28px',
-                      sm: '22px',
-                      xs: '20px',
+                      md: "28px",
+                      sm: "22px",
+                      xs: "20px",
                     },
-                    color: '#FFC200',
+                    color: "#FFC200",
                   }}
                 >
-                  {'No Match Found!'}
+                  {"No Match Found!"}
                 </Typography>
               </Box>
             ) : (
@@ -94,9 +95,9 @@ const Search = ({ search }) => {
                     <div key={item.id}>
                       <Box
                         sx={{
-                          border: '1px solid black',
-                          borderRadius: '5px',
-                          cursor: 'pointer',
+                          border: "1px solid black",
+                          borderRadius: "5px",
+                          cursor: "pointer",
                         }}
                         onClick={() => handleOnClick(item)}
                       >

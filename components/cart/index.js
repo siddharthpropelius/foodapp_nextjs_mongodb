@@ -1,12 +1,12 @@
-import { Button, Container, TextField, Typography } from '@mui/material';
-import { Box } from '@mui/material';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import CartCard from './CartCard';
-import { useDispatch, useSelector } from 'react-redux';
-import slice, { sliceAction } from '../../redux/slice/slice';
-import axiosInstance from '../../utils/axiosInstance';
-import Cookies from 'js-cookie';
+import { Button, Container, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import CartCard from "./CartCard";
+import { useDispatch, useSelector } from "react-redux";
+import slice, { sliceAction } from "../../redux/slice/slice";
+import axiosInstance from "../../utils/axiosInstance";
+import Cookies from "js-cookie";
 
 const Index = () => {
   const cart = useSelector((state) => state.slice.food);
@@ -15,20 +15,20 @@ const Index = () => {
   const discount = useSelector((state) => state.slice.discount);
   const haveCoupon = useSelector((state) => state.slice.couponName);
 
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState("");
   const [qty, setQty] = useState(0);
-  const [coupon, setCoupon] = useState('');
+  const [coupon, setCoupon] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-  const accessToken = Cookies.get('accessToken');
-  const refreshToken = Cookies.get('refreshToken');
+  const accessToken = Cookies.get("accessToken");
+  const refreshToken = Cookies.get("refreshToken");
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   console.log(discount);
 
   const handleOrderBtn = async () => {
     try {
       await axiosInstance.post(
-        'http://localhost:5000/api/orders',
+        "http://localhost:5000/api/orders",
         { items: cart, discount: discount },
         {
           headers: {
@@ -37,21 +37,21 @@ const Index = () => {
           },
         }
       );
-      setResponse('Order Placed SuccessFully');
+      setResponse("Order Placed SuccessFully");
       setTimeout(() => {
-        setResponse('');
-        router.push('/order');
+        setResponse("");
+        router.push("/order");
         setTimeout(() => {
           dispatch(sliceAction.reset());
         }, 1000);
       }, 1000);
     } catch (err) {
       if (err.response.status === 401) {
-        alert('Unauthenticated user!');
-        router.push('/');
+        alert("Unauthenticated user!");
+        router.push("/");
       } else {
         console.log(err);
-        alert('something went wrong! please login again');
+        alert("something went wrong! please login again");
         // router.push('/');
       }
     }
@@ -63,27 +63,27 @@ const Index = () => {
   };
 
   const removeCoupon = () => {
-    console.log('clicked');
+    console.log("clicked");
     dispatch(sliceAction.removeCoupon(discount));
     setIsCouponApplied(false);
   };
   return (
     <div>
       <Container>
-        <Typography variant="h5" sx={{ mt: '50px' }}>
+        <Typography variant="h5" sx={{ mt: "50px" }}>
           Your Cart
         </Typography>
       </Container>
       {cart.length === 0 ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: '100px' }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: "100px" }}>
           <Typography
             sx={{
               fontSize: {
-                md: '28px',
-                sm: '22px',
-                xs: '20px',
+                md: "28px",
+                sm: "22px",
+                xs: "20px",
               },
-              color: '#FFC200',
+              color: "#FFC200",
             }}
           >
             Nothing in Cart. Add Something
@@ -94,13 +94,13 @@ const Index = () => {
           <Container>
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexDirection: { md: 'row', xs: 'column' },
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: { md: "row", xs: "column" },
                 marginTop: 5,
               }}
             >
-              <Box sx={{ display: 'flex', flexDirection: 'column', flex: 2 }}>
+              <Box sx={{ display: "flex", flexDirection: "column", flex: 2 }}>
                 {cart?.map((item) => {
                   return (
                     <div key={item.id}>
@@ -121,7 +121,7 @@ const Index = () => {
             </Box>
           </Container>
 
-          <Box sx={{ mt: '20px' }}>
+          <Box sx={{ mt: "20px" }}>
             <div className="w-full flex justify-center pl-5">
               <div className="border px-12 py-6 rounded">
                 <h1 className="text-2xl text-[#FFC200] pb-4"> ORDER SUMMARY</h1>
@@ -133,8 +133,16 @@ const Index = () => {
                 <div className="flex justify-between mt-4">
                   {isCouponApplied ? (
                     <>
-                      <Typography sx={{ color: 'green' }}>
-                        COUPON APPLIED: {haveCoupon.toUpperCase()}{' '}
+                      <Typography sx={{ color: "green" }}>
+                        <span
+                          className={
+                            "flex justify-between text-black font-bold text-xl pb-2"
+                          }
+                        >
+                          <p>Discount:</p>
+                          <p>₹{discount}</p>
+                        </span>
+                        COUPON APPLIED: {haveCoupon.toUpperCase()}{" "}
                         <span
                           className="text-red-900 cursor-pointer"
                           onClick={removeCoupon}
@@ -156,12 +164,12 @@ const Index = () => {
                       <Button
                         variant="contained"
                         sx={{
-                          marginX: '6px',
-                          marginTop: '10px',
-                          color: '#FFFFFF',
-                          backgroundColor: '#F6B716',
-                          '&:hover': {
-                            backgroundColor: '#F6B711',
+                          marginX: "4px",
+                          marginTop: "0px",
+                          color: "#FFFFFF",
+                          backgroundColor: "#F6B716",
+                          "&:hover": {
+                            backgroundColor: "#F6B711",
                           },
                         }}
                         onClick={() => couponHandler()}
@@ -185,23 +193,23 @@ const Index = () => {
 
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              pt: '30px',
+              display: "flex",
+              justifyContent: "center",
+              pt: "30px",
             }}
           >
             <Typography
               sx={{
-                backgroundColor: '#F6B716',
-                color: '#FFFFFF',
-                width: '40%',
-                marginTop: '20px',
-                display: 'flex',
-                justifyContent: 'center',
-                borderRadius: '10px',
-                paddingY: '10px',
-                marginBottom: '10px',
-                cursor: 'pointer',
+                backgroundColor: "#F6B716",
+                color: "#FFFFFF",
+                width: "40%",
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+                borderRadius: "10px",
+                paddingY: "10px",
+                marginBottom: "10px",
+                cursor: "pointer",
               }}
               onClick={handleOrderBtn}
             >
@@ -210,11 +218,11 @@ const Index = () => {
           </Box>
           <Typography
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
+              display: "flex",
+              justifyContent: "center",
 
-              pb: '50px',
-              color: 'green',
+              pb: "50px",
+              color: "green",
             }}
           >
             {response}

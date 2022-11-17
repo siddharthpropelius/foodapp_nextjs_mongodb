@@ -1,11 +1,11 @@
-import { Box, Container, DialogContentText } from '@mui/material';
-import Image from 'next/image';
-import React from 'react';
-import Navbar from '../../components/layout/Navbar';
-import Head from 'next/head';
-import Search from '../../components/home/Search';
-import axiosInstance from '../../utils/axiosInstance';
-import axios from 'axios';
+import { Box, Container, DialogContentText } from "@mui/material";
+import Image from "next/image";
+import React from "react";
+import Navbar from "../../components/layout/Navbar";
+import Head from "next/head";
+import Search from "../../components/home/Search";
+import axiosInstance from "../../utils/axiosInstance";
+import axios from "axios";
 
 export async function getServerSideProps(context) {
   const cookie = context.req.cookies;
@@ -22,7 +22,7 @@ export async function getServerSideProps(context) {
   const searchResponse = await getSearchData;
 
   const getMetaData = await axios.get(
-    'http://localhost:5000/api/meta/by-id?metaId=7'
+    "http://localhost:5000/api/meta/by-id?metaId=7"
   );
   const meta = await getMetaData;
 
@@ -32,7 +32,6 @@ export async function getServerSideProps(context) {
 }
 
 const detail = (props) => {
-  console.log(props.meta.data.name);
   return (
     <div>
       <Head>

@@ -1,21 +1,21 @@
-import { Box, Container, Typography } from '@mui/material';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../utils/axiosInstance';
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+import { Box, Container, Typography } from "@mui/material";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../../utils/axiosInstance";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
-const index = () => {
-  const accessToken = Cookies.get('accessToken');
-  const refreshToken = Cookies.get('refreshToken');
+const Index = (props) => {
+  const accessToken = props.accessToken;
+  const refreshToken = props.refreshToken;
   const [data, setData] = useState([]);
   const router = useRouter();
   useEffect(() => {
     async function fetchOrders() {
       try {
         await axiosInstance
-          .get('http://localhost:5000/api/orders', {
+          .get("http://localhost:5000/api/orders", {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               refreshToken: `Bearer ${refreshToken}`,
@@ -26,11 +26,15 @@ const index = () => {
           });
       } catch (err) {
         if (err.response.status === 401) {
-          alert('Unauthenticated User!');
-          router.push('/');
+          Cookies.remove("accessToken");
+          Cookies.remove("refeshToken");
+          alert("Unauthenticated User!");
+          router.push("/");
         } else {
-          alert('Unauthenticated User!');
-          router.push('/');
+          Cookies.remove("accessToken");
+          Cookies.remove("refeshToken");
+          alert("Unauthenticated User!");
+          router.push("/");
         }
       }
     }
@@ -39,30 +43,30 @@ const index = () => {
   return (
     <div>
       <Container>
-        <Typography variant="h4" sx={{ textDecoration: 'underline', ml: 2 }}>
+        <Typography variant="h4" sx={{ textDecoration: "underline", ml: 2 }}>
           Orders
         </Typography>
         <Box
           sx={{
             mt: 2,
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
             gap: 5,
           }}
         >
           {data.length === 0 ? (
             <Box
-              sx={{ display: 'flex', justifyContent: 'center', mt: '100px' }}
+              sx={{ display: "flex", justifyContent: "center", mt: "100px" }}
             >
               <Typography
                 sx={{
                   fontSize: {
-                    md: '28px',
-                    sm: '22px',
-                    xs: '20px',
+                    md: "28px",
+                    sm: "22px",
+                    xs: "20px",
                   },
-                  color: '#FFC200',
+                  color: "#FFC200",
                 }}
               >
                 {"Nothing's Here. Order Something!"}
@@ -75,7 +79,7 @@ const index = () => {
                   <>
                     <Box
                       key={item.id}
-                      sx={{ border: '1px solid black', borderRadius: '5px' }}
+                      sx={{ border: "1px solid black", borderRadius: "5px" }}
                     >
                       <Image
                         src={item.items[0].fooditems.img}
@@ -102,4 +106,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

@@ -1,84 +1,112 @@
-import { Box, Button, Container, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../utils/axiosInstance';
-import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
-import CategoryCard from './CategoryCard';
+import { Box, Button, Container, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../../utils/axiosInstance";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import CategoryCard from "./CategoryCard";
 
 const Category = (props) => {
-  const accessToken = Cookies.get('accessToken');
-  const refreshToken = Cookies.get('refreshToken');
+  const accessToken = props.data.accessToken;
+  const refreshToken = props.data.accessToken;
 
   const router = useRouter();
   let id = router.query.id;
-  let category = 'recommended';
-  const [categoryName, setCategoryName] = useState('');
+  let category = "recommended";
+  const [categoryName, setCategoryName] = useState("");
   const [data, setData] = useState([]);
   useEffect(() => {
     Recommended();
   }, []);
 
   const Recommended = async () => {
-    let category = 'Recommended';
-    axiosInstance
-      .get(`http://localhost:5000/api/food/?restaurantId=${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          refreshToken: `Bearer ${refreshToken}`,
-        },
-      })
-      .then((res) => {
-        setData(res.data.data);
-        setCategoryName('recommended');
-      });
-  };
-
-  const onClickHandler = async (item) => {
-    let category = item.name;
-    await axiosInstance
-      .get(
-        `http://localhost:5000/api/food/?restaurantId=${id}&categoryId=${item.id}`,
-        {
+    try {
+      let category = "Recommended";
+      axiosInstance
+        .get(`http://localhost:5000/api/food/?restaurantId=${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             refreshToken: `Bearer ${refreshToken}`,
           },
-        }
-      )
-      .then((res) => {
-        setData(res.data.data);
-        setCategoryName(category);
-      });
+        })
+        .then((res) => {
+          setData(res.data.data);
+          setCategoryName("recommended");
+        });
+    } catch (e) {
+      if (e.response.status === 401) {
+        Cookies.remove("accessToken", { path: "" });
+        Cookies.remove("refreshToken", { path: "" });
+        alert("Unauthenticated User!");
+        router.push("/");
+      } else {
+        Cookies.remove("accessToken", { path: "" });
+        Cookies.remove("refreshToken", { path: "" });
+        alert("Unauthenticated User!");
+        router.push("/");
+      }
+    }
+  };
+
+  const onClickHandler = async (item) => {
+    try {
+      let category = item.name;
+      await axiosInstance
+        .get(
+          `http://localhost:5000/api/food/?restaurantId=${id}&categoryId=${item.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              refreshToken: `Bearer ${refreshToken}`,
+            },
+          }
+        )
+        .then((res) => {
+          setData(res.data.data);
+          setCategoryName(category);
+        });
+    } catch (e) {
+      if (e.response.status === 401) {
+        Cookies.remove("accessToken", { path: "" });
+        Cookies.remove("refreshToken", { path: "" });
+        alert("Unauthenticated User!");
+        router.push("/");
+      } else {
+        Cookies.remove("accessToken", { path: "" });
+        Cookies.remove("refreshToken", { path: "" });
+        alert("Unauthenticated User!");
+        router.push("/");
+      }
+    }
   };
 
   return (
-    <Container sx={{ my: '50px' }}>
+    <Container sx={{ my: "50px" }}>
       <Typography variant="h4">Order Online</Typography>
       <Box
         sx={{
-          display: 'flex',
-          gap: '20px',
-          mt: '30px',
-          flexDirection: { md: 'row', xs: 'column' },
+          display: "flex",
+          gap: "20px",
+          mt: "30px",
+          flexDirection: { md: "row", xs: "column" },
           flex: 3,
         }}
       >
         <Box
           sx={{
-            display: { xs: 'flex', md: 'block' },
-            overflowX: 'scroll',
+            display: { xs: "flex", md: "block" },
+            overflowX: "scroll",
             flex: 1 / 2,
-            textAlign: { md: 'left', xs: 'center' },
+            textAlign: { md: "left", xs: "center" },
           }}
         >
           <Typography
             onClick={() => Recommended()}
             sx={{
-              cursor: 'pointer',
-              p: '10px',
+              cursor: "pointer",
+              p: "10px",
               flex: 4,
-              color: 'recommended' == categoryName ? 'white' : 'black',
-              backgroundColor: 'recommended' == categoryName ? '#FFC300' : '',
+              color: "recommended" == categoryName ? "white" : "black",
+              backgroundColor: "recommended" == categoryName ? "#FFC300" : "",
             }}
           >
             RECOMMENDED
@@ -89,10 +117,10 @@ const Category = (props) => {
                 <Typography
                   onClick={() => onClickHandler(item)}
                   sx={{
-                    cursor: 'pointer',
-                    color: item.name == categoryName ? 'white' : 'black',
-                    backgroundColor: item.name == categoryName ? '#FFC300' : '',
-                    p: '10px',
+                    cursor: "pointer",
+                    color: item.name == categoryName ? "white" : "black",
+                    backgroundColor: item.name == categoryName ? "#FFC300" : "",
+                    p: "10px",
                     flex: 4,
                   }}
                   key={item.id}
@@ -103,7 +131,7 @@ const Category = (props) => {
             );
           })}
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
           {data?.map((item) => {
             return (
               <>

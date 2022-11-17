@@ -15,6 +15,22 @@ a {
   box-sizing: border-box;
 }
 
+.roundedCircle {
+  transform: translate(-50%, -50%);
+  height: 30px;
+  width: 50px;
+  border-radius: 150px 150px 0 0;
+  border-style: ;
+  border-width: 1px;
+  border-color: #eceef6;
+  background-color: white;
+  border-style: ridge;
+  transform: rotate(180deg);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -1px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

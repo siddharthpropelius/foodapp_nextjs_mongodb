@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/layout/Navbar';
-import Hero from '../../components/restro/hero';
-import Name from '../../components/restro/Name';
-import Menu from '../../components/restro/Menu';
-import Category from '../../components/restro/Category';
-import Head from 'next/head';
-import axiosInstance from '../../utils/axiosInstance';
+import React, { useEffect, useState } from "react";
+import Navbar from "../../components/layout/Navbar";
+import Hero from "../../components/restro/hero";
+import Name from "../../components/restro/Name";
+import Menu from "../../components/restro/Menu";
+import Category from "../../components/restro/Category";
+import Head from "next/head";
+import axiosInstance from "../../utils/axiosInstance";
 
 export async function getServerSideProps(context) {
   const restaurantId = context.query.id;
@@ -13,9 +13,9 @@ export async function getServerSideProps(context) {
 
   // meta data
   const fetchMetaData = await fetch(
-    'http://localhost:5000/api/meta/by-id?metaId=3',
+    "http://localhost:5000/api/meta/by-id?metaId=3",
     {
-      method: 'GET',
+      method: "GET",
     }
   );
   const response = await fetchMetaData.json();
@@ -32,7 +32,12 @@ export async function getServerSideProps(context) {
   const restaurantResult = await getResturant;
 
   return {
-    props: { meta: response.data, restaurant: restaurantResult.data },
+    props: {
+      meta: response.data,
+      restaurant: restaurantResult.data,
+      accessToken: cookie.accessToken,
+      refreshToken: cookie.refreshToken,
+    },
   };
 }
 
