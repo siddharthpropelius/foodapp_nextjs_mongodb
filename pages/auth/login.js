@@ -48,7 +48,6 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    console.log("notfound");
     return {
       props: { isLoggedIn: false },
     };
@@ -56,7 +55,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Login(props) {
-  console.log(props);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -71,13 +69,15 @@ export default function Login(props) {
         "http://localhost:5000/api/user/login",
         { email: email, password: password }
       );
+      console.log(checkLogin);
       if (checkLogin.status === 200) {
         Cookies.set("accessToken", checkLogin.data.accessToken);
         Cookies.set("refreshToken", checkLogin.data.refreshToken);
         router.push("/home");
       }
     } catch (err) {
-      // setError(err.response.data.message);
+      console.log(err);
+      setError(err?.response?.data?.message);
     }
   };
 

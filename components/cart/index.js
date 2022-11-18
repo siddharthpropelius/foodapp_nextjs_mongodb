@@ -23,7 +23,6 @@ const Index = () => {
   const accessToken = Cookies.get("accessToken");
   const refreshToken = Cookies.get("refreshToken");
   const [isCouponApplied, setIsCouponApplied] = useState(false);
-  console.log(discount);
 
   const handleOrderBtn = async () => {
     try {
@@ -47,12 +46,16 @@ const Index = () => {
       }, 1000);
     } catch (err) {
       if (err.response.status === 401) {
+        Cookies.remove("accessToken", { path: "" });
+        Cookies.remove("refreshToken", { path: "" });
+
         alert("Unauthenticated user!");
         router.push("/");
       } else {
-        console.log(err);
-        alert("something went wrong! please login again");
-        // router.push('/');
+        Cookies.remove("accessToken", { path: "" });
+        Cookies.remove("refreshToken", { path: "" });
+        alert("Unauthenticated user!");
+        router.push("/");
       }
     }
   };
@@ -63,7 +66,6 @@ const Index = () => {
   };
 
   const removeCoupon = () => {
-    console.log("clicked");
     dispatch(sliceAction.removeCoupon(discount));
     setIsCouponApplied(false);
   };

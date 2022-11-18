@@ -88,13 +88,10 @@ export default function Account(props) {
     dispatch(sliceAction.reset());
     Cookies.remove("accessToken", { path: "" });
     Cookies.remove("refreshToken", { path: "" });
-    router.push("/");
+    router.push("/auth/login");
   };
 
   const updatePassword = async (e) => {
-    console.log("clicked");
-    console.log(password);
-
     try {
       await axiosInstance
         .put(

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { sliceAction } from "../../redux/slice/slice";
 
 const Search = ({ search }) => {
-  console.log(search);
   const router = useRouter();
   const txtRef = useRef();
   const id = router.query.id;
@@ -22,7 +21,6 @@ const Search = ({ search }) => {
     const price = item.price;
 
     const find = cart.find((item) => item.foodId === foodId);
-    console.log(find);
     if (find?.quantity === 5) {
       setResponse({ error: "Cannot add more than 5 quantity" });
       setTimeout(() => {
@@ -52,7 +50,6 @@ const Search = ({ search }) => {
             }}
             label="Search for restuarant, cuisine, place"
             inputRef={txtRef}
-            value={id}
             variant="filled"
             fullWidth
           />

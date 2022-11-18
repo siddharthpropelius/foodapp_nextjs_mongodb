@@ -25,7 +25,7 @@ const Detail = (props) => {
           })
           .then((res) => {
             setData(res.data);
-            console.log(res.data);
+            console.log("data", data);
           });
       } catch (err) {
         if (err.response.status === 401) {
@@ -71,22 +71,24 @@ const Detail = (props) => {
                         width={100}
                         height={100}
                         objectFit="cover"
-                        className="rounded-ful"
+                        className="rounded-full py-2"
                       />
-                      <p>{item.fooditems.name}</p>
-                      <p>X{item.quantity}</p>
+                      <p className={"my-auto"}>{item.fooditems.name}</p>
+                      <p className={"my-auto"}>X{item.quantity}</p>
                     </div>
                   );
                 })}
-                <div className="flex justify-between">
-                  <p>Discount</p>
-                  <p>₹{(item.subtotal * item.discount) / 100}</p>
-                </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between py-1 pt-5">
                   <p>SubTotal</p>
                   <p>₹{item.subtotal}</p>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between py-6">
+                  <p>Discount</p>
+                  <p>₹{item?.discount}</p>
+                </div>
+
+                <hr />
+                <div className="flex justify-between mb-16">
                   <p>Total</p>
                   <p>₹{item.total}</p>
                 </div>

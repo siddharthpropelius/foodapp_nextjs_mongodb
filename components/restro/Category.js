@@ -134,7 +134,7 @@ const Category = (props) => {
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           {data?.map((item) => {
             return (
-              <>
+              <div key={item.id}>
                 <CategoryCard
                   key={item.id}
                   id={item.id}
@@ -145,7 +145,7 @@ const Category = (props) => {
                   img={item.img}
                   time="15"
                 />
-              </>
+              </div>
             );
           })}
         </Box>

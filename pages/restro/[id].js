@@ -42,7 +42,6 @@ export async function getServerSideProps(context) {
 }
 
 const DetailPage = (props) => {
-  console.log(props);
   return (
     <div>
       <Head>

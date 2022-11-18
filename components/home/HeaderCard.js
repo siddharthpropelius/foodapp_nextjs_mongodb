@@ -8,6 +8,7 @@ import c3 from "../../assets/c3.png";
 import c4 from "../../assets/c4.png";
 import c5 from "../../assets/c5.png";
 import c6 from "../../assets/c6.png";
+import Cline from "../../assets/cline.png";
 
 const HeaderCard = () => {
   return (
@@ -107,12 +108,10 @@ const HeaderCard = () => {
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-around",
-              gap: "10px",
-              mt: "60px",
-              alignItem: "center",
-              alignContent: "center",
+              marginLeft: "auto",
+              marginRight: "auto",
+              gap: "20px",
+              marginTop: "50px",
             }}
           >
             <Box
@@ -120,21 +119,27 @@ const HeaderCard = () => {
                 display: "flex",
                 flexDirection: "column",
                 m: "auto",
-                width: { md: "100%", xs: "170px" },
               }}
             >
-              <Image src={c4} alt="food" width={500} height={500} />
-              <Typography
-                variant="p"
-                sx={{
-                  marginX: "auto",
-                  justifyContent: "center",
-                  mt: "10px",
-                  display: { md: "block", xs: "none" },
-                }}
-              >
-                Chicken Noodles
-              </Typography>
+              <Image src={c4} alt="food" width={200} height={200} />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                m: "auto",
+              }}
+            >
+              <Image src={Cline} alt="food" width={200} height={200} />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                m: "auto",
+              }}
+            >
+              <Image src={c5} alt="food" width={200} height={200} />
             </Box>
 
             <Box
@@ -142,43 +147,18 @@ const HeaderCard = () => {
                 display: "flex",
                 flexDirection: "column",
                 m: "auto",
-                width: { md: "100%", xs: "170px" },
               }}
             >
-              <Image src={c5} alt="food" width={500} height={500} />
-              <Typography
-                variant="p"
-                sx={{
-                  marginX: "auto",
-                  justifyContent: "center",
-                  mt: "10px",
-                  display: { md: "block", xs: "none" },
-                }}
-              >
-                French Fries
-              </Typography>
+              <Image src={Cline} alt="food" width={200} height={200} />
             </Box>
-
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 m: "auto",
-                width: { md: "100%", xs: "170px" },
               }}
             >
-              <Image src={c6} alt="food" width={500} height={500} />
-              <Typography
-                variant="p"
-                sx={{
-                  marginX: "auto",
-                  justifyContent: "center",
-                  mt: "10px",
-                  display: { md: "block", xs: "none" },
-                }}
-              >
-                Avacado Mint Noodles
-              </Typography>
+              <Image src={c6} alt="food" width={200} height={200} />
             </Box>
           </Box>
         </Box>

@@ -1,20 +1,20 @@
-import Head from 'next/head';
-import Navbar from '../../components/layout/Navbar';
-import FoodWeather from '../../components/menu/FoodWeather';
-import Restro from '../../components/menu/Restro';
-import axiosInstance from '../../utils/axiosInstance';
+import Head from "next/head";
+import Navbar from "../../components/layout/Navbar";
+import FoodWeather from "../../components/menu/FoodWeather";
+import Restro from "../../components/menu/Restro";
+import axiosInstance from "../../utils/axiosInstance";
 
 export async function getServerSideProps(context) {
   try {
     const cookie = context.req.cookies;
     //get metadata from server
     const fetchMetaData = await fetch(
-      'http://localhost:5000/api/meta/by-id?metaId=2'
+      "http://localhost:5000/api/meta/by-id?metaId=2"
     );
     const response = await fetchMetaData.json();
 
     const getRestaurants = await axiosInstance.get(
-      'http://localhost:5000/api/restaurant',
+      "http://localhost:5000/api/restaurant",
       {
         headers: {
           Authorization: `Bearer ${cookie.accessToken}`,
@@ -29,7 +29,6 @@ export async function getServerSideProps(context) {
   } catch (err) {
     const error = err;
 
-    console.log('err', error);
     return {
       props: { error: error },
     };

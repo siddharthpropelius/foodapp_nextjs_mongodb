@@ -77,8 +77,9 @@ export default function Register() {
         router.push("/home");
       }
     } catch (err) {
-      console.log(err);
       // setError(err.response.data.message);
+      setError("Something went wrong please try again later!");
+      console.log(err);
     }
   };
 

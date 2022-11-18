@@ -1,18 +1,18 @@
-import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { sliceAction } from '../../redux/slice/slice';
+import { Box, Typography } from "@mui/material";
+import Image from "next/image";
+import React, { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { sliceAction } from "../../redux/slice/slice";
 
 const CartCard = ({ id, name, img, price, quantity }) => {
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState("");
   const dispatch = useDispatch();
   const addToCart = () => {
     if (quantity === 5) {
-      setResponse('Cannot add more than 5 items');
+      setResponse("Cannot add more than 5 items");
       setTimeout(() => {
-        setResponse('');
+        setResponse("");
       }, 1000);
     }
     dispatch(
@@ -27,26 +27,26 @@ const CartCard = ({ id, name, img, price, quantity }) => {
     <div>
       <Box
         sx={{
-          display: 'flex',
-          gap: '10px',
+          display: "flex",
+          gap: "10px",
           py: 2,
-          justifyContent: { md: 'space-around' },
-          marginX: 'auto',
-          flexDirection: { md: 'row', xs: 'column' },
+          justifyContent: { md: "space-around" },
+          marginX: "auto",
+          flexDirection: { md: "row", xs: "column" },
         }}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column-reverse', sm: 'row-reverse' },
+            display: "flex",
+            flexDirection: { xs: "column-reverse", sm: "row-reverse" },
           }}
         >
           <Box sx={{ pl: 4 }}>
-            <Typography sx={{ fontWeight: 'bold' }}>{name}</Typography>
+            <Typography sx={{ fontWeight: "bold" }}>{name}</Typography>
             <Box
               sx={{
                 mt: 1,
-                flexWrap: 'nowrap',
+                flexWrap: "nowrap",
               }}
             >
               <button
@@ -63,7 +63,7 @@ const CartCard = ({ id, name, img, price, quantity }) => {
                 +
               </button>
             </Box>
-            <Typography sx={{ fontSize: '12px', mt: 1, ml: 1, color: 'red' }}>
+            <Typography sx={{ fontSize: "12px", mt: 1, ml: 1, color: "red" }}>
               {response}
             </Typography>
           </Box>
@@ -74,7 +74,7 @@ const CartCard = ({ id, name, img, price, quantity }) => {
             height={150}
             objectFit="cover"
             style={{
-              borderRadius: '10px',
+              borderRadius: "10px",
             }}
           />
         </Box>

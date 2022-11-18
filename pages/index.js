@@ -3,7 +3,6 @@ import Login from "../components/auth/Login";
 export async function getServerSideProps(context) {
   const cookie = context.req.cookies;
   if (cookie.accessToken !== undefined) {
-    console.log("found");
     return {
       props: {
         accessToken: cookie.accessToken,
@@ -16,7 +15,6 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    console.log("notfound");
     return {
       props: { isLoggedIn: false },
       redirect: {

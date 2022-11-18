@@ -19,7 +19,7 @@ import Rounded from "../../assets/roundbottom.png";
 
 const PopularRecipes = (props) => {
   const [recipes, setRecipes] = useState([]);
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState({ res: "", success: "" });
   const cart = useSelector((state) => state.slice.food);
   const accessToken = props.accessToken;
   const refreshToken = props.refreshToken;
@@ -92,12 +92,12 @@ const PopularRecipes = (props) => {
     if (find?.quantity === 5) {
       setResponse({ error: "Cannot add more than 5 quantity" });
       setTimeout(() => {
-        setResponse({});
+        setResponse({ success: "", error: "" });
       }, 1000);
     } else {
       setResponse({ success: "Item added to cart" });
       setTimeout(() => {
-        setResponse("");
+        setResponse({ success: "", error: "" });
       }, 1000);
     }
     dispatch(
@@ -174,6 +174,10 @@ const PopularRecipes = (props) => {
           );
         })}
       </Box>
+      <Typography sx={{ color: "green", pl: "6px" }}>
+        {response.success}
+      </Typography>
+      <Typography sx={{ color: "red", pl: "5px" }}>{response.error}</Typography>
       <Box sx={{ mt: "50px", px: { xs: "6px", md: "30px" } }}>
         <Swiper
           loop={true}
@@ -260,31 +264,6 @@ const PopularRecipes = (props) => {
                       </p>
                     </Box>
                     <Box>
-                      {/*<div className={"roundedCircle"}>*/}
-                      {/*  <div*/}
-                      {/*    className={*/}
-                      {/*      "mt-[10px] hover:bg-[#F6B716] translate-x-0   z-2 mx-auto bg-white p-1 w-fit  border border-10 border-#ECEEF6 rounded-full "*/}
-                      {/*    }*/}
-                      {/*  >*/}
-                      {/*    <ShoppingBagIcon />*/}
-                      {/*  </div>*/}
-                      {/*</div>*/}
-                      {/*<div*/}
-                      {/*  className={*/}
-                      {/*    "hover:bg-[#F6B716] translate-x-0 translate-y-[-20px]  z-2 mx-auto bg-white p-1 mb-1   bottom-0 right-0 left-0 w-fit  border border-10 border-#ECEEF6 rounded-full "*/}
-                      {/*  }*/}
-                      {/*>*/}
-                      {/*  <ShoppingBagIcon />*/}
-                      {/*</div>*/}
-                      {/*<span*/}
-                      {/*  className={*/}
-                      {/*    "rounded-full border-t-0 border border-2 border-l-0 border-r-0 border-[#ECEEF6] w-14 flex mx-auto items-center translate-y-[-110px]"*/}
-                      {/*  }*/}
-                      {/*>*/}
-                      {/*  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*/}
-                      {/*  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*/}
-                      {/*  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*/}
-                      {/*</span>*/}
                       <div className={"flex justify-center mt-[-23px]"}>
                         <Image
                           src={Rounded}
@@ -294,7 +273,7 @@ const PopularRecipes = (props) => {
                         />
                         <div
                           className={
-                            "absolute bg-white border border-1 border-[#ECEEF6] rounded-full p-1"
+                            "bg-white hover:bg-[#F6B716] cursor-pointer absolute bg-white border border-1 border-[#ECEEF6] rounded-full p-1"
                           }
                         >
                           <ShoppingBagIcon />

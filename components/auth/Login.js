@@ -34,7 +34,6 @@ export const IconTextField = ({ iconStart, iconEnd, InputProps, ...props }) => {
 };
 
 export default function Login(props) {
-  console.log("LOgin", props);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

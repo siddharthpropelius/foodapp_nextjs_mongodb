@@ -22,7 +22,7 @@ const Navbar = () => {
     Cookies.remove("accessToken", { path: "" });
     Cookies.remove("refreshToken", { path: "" });
     dispatch(sliceAction.reset());
-    router.push("/");
+    router.push("/auth/login");
   };
   return (
     <div className="bg-[white] z-999 overflow-hidden">

@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const slice = createSlice({
-  name: 'slice',
+  name: "slice",
   initialState: {
     total: 0,
     newTotal: 0,
@@ -10,31 +10,31 @@ const slice = createSlice({
     couponList: [
       {
         id: 1,
-        name: '10onus',
+        name: "10onus",
         discountedPercentage: 10,
       },
       {
         id: 2,
-        name: '20onus',
+        name: "20onus",
         discountedPercentage: 20,
       },
       {
         id: 3,
-        name: '30onus',
+        name: "30onus",
         discountedPercentage: 30,
       },
       {
         id: 4,
-        name: '40onus',
+        name: "40onus",
         discountedPercentage: 40,
       },
       {
         id: 5,
-        name: '50onus',
+        name: "50onus",
         discountedPercentage: 50,
       },
     ],
-    couponName: '',
+    couponName: "",
     discount: 0,
   },
   reducers: {
@@ -101,7 +101,6 @@ const slice = createSlice({
       const found = state.couponList.find(
         (item) => item.name === coupon.toLowerCase()
       );
-      console.log('FOUND', found);
       state.discount = Math.round(
         (state.total / 100) * found.discountedPercentage
       );
@@ -111,7 +110,7 @@ const slice = createSlice({
     },
 
     removeCoupon(state, action) {
-      state.couponData = '';
+      state.couponData = "";
       state.newTotal = state.total;
     },
   },
