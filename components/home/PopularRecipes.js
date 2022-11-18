@@ -264,7 +264,10 @@ const PopularRecipes = (props) => {
                       </p>
                     </Box>
                     <Box>
-                      <div className={"flex justify-center mt-[-23px]"}>
+                      <div
+                        className={"flex justify-center mt-[-23px]"}
+                        onClick={() => handleOnAdd(item)}
+                      >
                         <Image
                           src={Rounded}
                           alt={"svg"}

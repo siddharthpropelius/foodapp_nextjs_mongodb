@@ -38,7 +38,7 @@ const CartCard = ({ id, name, img, price, quantity }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column-reverse", sm: "row-reverse" },
+            flexDirection: { xs: "column-reverse", md: "row-reverse" },
           }}
         >
           <Box sx={{ pl: 4 }}>
@@ -75,6 +75,8 @@ const CartCard = ({ id, name, img, price, quantity }) => {
             objectFit="cover"
             style={{
               borderRadius: "10px",
+              position: "fixed",
+              height: { md: "300px" },
             }}
           />
         </Box>

@@ -19,8 +19,9 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const handleOnLogout = () => {
-    Cookies.remove("accessToken", { path: "" });
-    Cookies.remove("refreshToken", { path: "" });
+    console.log("Clicked! on Navbar");
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
     dispatch(sliceAction.reset());
     router.push("/auth/login");
   };

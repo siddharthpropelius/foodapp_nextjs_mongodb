@@ -66,6 +66,7 @@ const Index = () => {
   };
 
   const removeCoupon = () => {
+    console.log("clicked");
     dispatch(sliceAction.removeCoupon(discount));
     setIsCouponApplied(false);
   };
@@ -136,14 +137,14 @@ const Index = () => {
                   {isCouponApplied ? (
                     <>
                       <Typography sx={{ color: "green" }}>
-                        <span
+                        <spans
                           className={
                             "flex justify-between text-black font-bold text-xl pb-2"
                           }
                         >
                           <p>Discount:</p>
                           <p>₹{discount}</p>
-                        </span>
+                        </spans>
                         COUPON APPLIED: {haveCoupon.toUpperCase()}{" "}
                         <span
                           className="text-red-900 cursor-pointer"

@@ -28,7 +28,6 @@ export async function getServerSideProps(context) {
     };
   } catch (err) {
     const error = err;
-
     return {
       props: { error: error },
     };

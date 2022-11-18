@@ -86,9 +86,10 @@ export default function Account(props) {
 
   const handleOnLogout = () => {
     dispatch(sliceAction.reset());
-    Cookies.remove("accessToken", { path: "" });
-    Cookies.remove("refreshToken", { path: "" });
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
     router.push("/auth/login");
+    console.log("Clicked on Accounts Page!");
   };
 
   const updatePassword = async (e) => {
