@@ -35,7 +35,9 @@ const HeaderCard = () => {
               <Image
                 src={c1}
                 alt="food"
-                className="w-[380px] h-[120px]"
+                // className="w-[380px] h-[120px]"
+                width={380}
+                height={120}
                 style={{ maxWidth: "unset" }}
               />
             </Box>
@@ -57,7 +59,9 @@ const HeaderCard = () => {
             <Image
               src={c2}
               alt="food"
-              className="w-[380px] h-[120px]"
+              // className="w-[380px] h-[120px]"
+              width={380}
+              height={120}
               style={{ maxWidth: "unset" }}
             />
             <Typography variant="h5" sx={{ px: 2, pt: 2 }}>
@@ -78,7 +82,9 @@ const HeaderCard = () => {
             <Image
               src={c3}
               alt="food"
-              className="w-[380px] h-[120px]"
+              // className="w-[380px] h-[120px]"
+              width={380}
+              height={120}
               style={{ maxWidth: "unset" }}
             />
             <Typography variant="h5" sx={{ px: 2, pt: 2 }}>
@@ -94,7 +100,7 @@ const HeaderCard = () => {
           <Typography
             sx={{
               pt: "60px",
-              color: "#FFC200",
+              color: "#b68d00",
               fontSize: { md: "48px", sm: "38px", xs: "32px" },
             }}
           >

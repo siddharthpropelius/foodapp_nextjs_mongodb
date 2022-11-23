@@ -79,7 +79,7 @@ const Search = ({ search }) => {
                       sm: "22px",
                       xs: "20px",
                     },
-                    color: "#FFC200",
+                    color: "#b68d00",
                   }}
                 >
                   {"No Match Found!"}

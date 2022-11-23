@@ -86,7 +86,7 @@ const Index = () => {
                 sm: "22px",
                 xs: "20px",
               },
-              color: "#FFC200",
+              color: "#937000",
             }}
           >
             Nothing in Cart. Add Something
@@ -127,7 +127,7 @@ const Index = () => {
           <Box sx={{ mt: "20px" }}>
             <div className="w-full flex justify-center pl-5">
               <div className="border px-12 py-6 rounded">
-                <h1 className="text-2xl text-[#FFC200] pb-4"> ORDER SUMMARY</h1>
+                <h1 className="text-2xl text-[#937000] pb-4"> ORDER SUMMARY</h1>
                 <hr />
                 <div className="flex justify-between mt-4">
                   <p className="font-bold text-xl">Sub Total :</p>
@@ -170,9 +170,9 @@ const Index = () => {
                           marginX: "4px",
                           marginTop: "0px",
                           color: "#FFFFFF",
-                          backgroundColor: "#F6B716",
+                          backgroundColor: "#937000",
                           "&:hover": {
-                            backgroundColor: "#F6B711",
+                            backgroundColor: "#937000",
                           },
                         }}
                         onClick={() => couponHandler()}
@@ -203,7 +203,7 @@ const Index = () => {
           >
             <Typography
               sx={{
-                backgroundColor: "#F6B716",
+                backgroundColor: "#937000",
                 color: "#FFFFFF",
                 width: "40%",
                 marginTop: "20px",

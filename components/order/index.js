@@ -85,7 +85,7 @@ const Index = (props) => {
                         src={item.items[0].fooditems.img}
                         width={250}
                         height={250}
-                        alt={item.name}
+                        alt={item.items[0].fooditems.name}
                         objectFit="cover"
                       />
                       <Typography sx={{ px: 1 }}>

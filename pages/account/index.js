@@ -137,13 +137,13 @@ export default function Account(props) {
         <p className={"text-xl pt-2"}>Email: {email}</p>
         <button
           onClick={handleOpen}
-          className={"rounded-md bg-[#FFC300] text-white px-3 py-1 mt-2"}
+          className={"rounded-md bg-[#B68D00] text-white px-3 py-1 mt-2"}
         >
           Update Password
         </button>
 
         <button
-          className="rounded-md bg-[#FFC300] px-3 text-white py-1 mt-2 cursor-pointer"
+          className="rounded-md bg-[#B68D00] px-3 text-white py-1 mt-2 cursor-pointer"
           onClick={() => handleOnLogout()}
         >
           Logout
@@ -175,7 +175,7 @@ export default function Account(props) {
               />
             </div>
             <button
-              className={"bg-[#FFC300] text-white px-2 py-1 rounded-lg mx-4"}
+              className={"bg-[#B68D00] text-white px-2 py-1 rounded-lg mx-4"}
               onClick={updatePassword}
             >
               Update

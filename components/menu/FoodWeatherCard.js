@@ -54,7 +54,7 @@ const FoodWeatherCard = ({ id, name, img, price }) => {
         <Typography variant="h6" sx={{ pt: "8px" }}>
           {name}
         </Typography>
-        <Typography variant="p" sx={{ color: "#999999", pb: "8px" }}>
+        <Typography variant="p" sx={{ color: "#757575", pb: "8px" }}>
           15 Min
         </Typography>
 

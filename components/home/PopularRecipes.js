@@ -158,11 +158,11 @@ const PopularRecipes = (props) => {
 
                   color: item.name === category ? "white" : "black",
                   backgroundColor:
-                    item.name === category ? "#F6B716 !important" : "",
+                    item.name === category ? "#b68d00 !important" : "",
                   borderRadius: "45px",
                   px: "40px",
                   "&:hover": {
-                    backgroundColor: "#F6B716",
+                    backgroundColor: "#b68d00",
                     color: "#fff",
                   },
                 }}
@@ -276,7 +276,7 @@ const PopularRecipes = (props) => {
                         />
                         <div
                           className={
-                            "bg-white hover:bg-[#F6B716] cursor-pointer absolute bg-white border border-1 border-[#ECEEF6] rounded-full p-1"
+                            "bg-white hover:bg-[#b68d00] cursor-pointer absolute bg-white border border-1 border-[#ECEEF6] rounded-full p-1"
                           }
                         >
                           <ShoppingBagIcon />

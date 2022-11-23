@@ -2,75 +2,10 @@ import { Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/future/image";
 import React, { useState, useEffect } from "react";
-import i1 from "../../assets/i1.png";
-import i2 from "../../assets/i2.png";
-import i3 from "../../assets/i3.png";
 import FoodWeatherCard from "./FoodWeatherCard";
-import Cookies from "js-cookie";
-import axiosInstance from "../../utils/axiosInstance";
-import { useRouter } from "next/router";
 
-const FoodWeather = () => {
-  const imgData = [
-    {
-      id: 1,
-      img: i1,
-      primary: "veggie friendly",
-      secondery: "29 places near you",
-    },
-    {
-      id: 2,
-      img: i2,
-      primary: "trending this week",
-      secondery: "29 places near you",
-    },
-
-    {
-      id: 3,
-      img: i3,
-      primary: "authentic",
-      secondery: "29 places near you",
-    },
-  ];
-
-  const [filtereddata, setFilteredData] = useState([]);
-  const accessToken = Cookies.get("accessToken");
-  const refreshToken = Cookies.get("refreshToken");
-  const router = useRouter();
-  useEffect(() => {
-    const fetchAPI = async () => {
-      try {
-        const data = await axiosInstance.get(
-          "http://localhost:5000/api/food/",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              refreshToken: `Bearer ${refreshToken}`,
-            },
-          }
-        );
-        const result = data.data.data;
-        const newDAta = [...result];
-        const sort = newDAta.sort(() => Math.random() - Math.random());
-        const randomData = sort.splice(1, 6);
-        setFilteredData(randomData);
-      } catch (err) {
-        if (err.response.status === 401) {
-          Cookies.remove("accessToken", { path: "" });
-          Cookies.remove("refreshToken", { path: "" });
-          alert("Unauthenticated User");
-          router.push("/");
-        } else {
-          Cookies.remove("accessToken", { path: "" });
-          Cookies.remove("refreshToken", { path: "" });
-          alert("Unauthenticated User!");
-          router.push("/");
-        }
-      }
-    };
-    fetchAPI();
-  }, []);
-
+const FoodWeather = (props) => {
+  console.log(props);
   return (
     <>
       <Container>
@@ -86,7 +21,7 @@ const FoodWeather = () => {
             mt: "30px",
           }}
         >
-          {filtereddata.map((item) => {
+          {props.data.food.map((item) => {
             return (
               <div key={item.id}>
                 <FoodWeatherCard
@@ -117,7 +52,7 @@ const FoodWeather = () => {
             overflowY: "hidden",
           }}
         >
-          {imgData.map((item) => {
+          {props.data.imgData.map((item) => {
             return (
               <div key={item.id} className="mx-auto">
                 <Box
@@ -131,7 +66,8 @@ const FoodWeather = () => {
                   <Image
                     src={item.img}
                     alt={item.primary}
-                    className="w-[350px]"
+                    width={350}
+                    // className="w-[350px]"
                     style={{ maxWidth: "unset" }}
                   />
                   <Typography
